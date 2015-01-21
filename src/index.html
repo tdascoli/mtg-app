@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html ng-app="mtg-app">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <title translate="common_site_title"></title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png"/>
+
+    <script>
+        var WebFontConfig = {
+            google: { families: [ 'RobotoDraft:400,300,500:latin' ] }
+        };
+        (function() {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
+
+    <!-- styles -->
+    <link rel="stylesheet" type="text/css" href="lib/alv-ch-ng/css/alv-ch-bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/mtg-app.css"/>
+    <!-- /style -->
+</head>
+<body class="fluid">
+    <div id="topnav" class="topnav">
+        <!-- /.navbar -->
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <sidebar-toggle></sidebar-toggle>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#global-navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <button type="button" class="navbar-toggle navbar-btn navbar-cog" data-toggle="collapse" data-target="#global-navigation">
+                        <span glyph-icon="cog"></span>
+                    </button>
+                    <div class="navbar-brand alv">
+                        <a href="#/"><img src="images/alv-ch-ng.png" alt="Logo" /><span class="mtg">Mtg</span></a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="global-navigation">
+                    <ul class="nav navbar-nav">
+                        <li active-startswith="/welcome">
+                            <a href="#/welcome" class="pointer" translate="nav.welcome"></a>
+                        </li>
+                        <li active-startswith="/deck-builder">
+                            <a href="#/deck-builder" class="pointer" translate="nav.deckBuilder"></a>
+                        </li>
+                        <li active-startswith="/playground">
+                            <a href="#/playground" class="pointer" translate="nav.playgroundText"></a>
+                        </li>
+                    </ul>
+                    <ul class="subnavbar nav navbar-nav navbar-highlight navbar-right">
+                        <li ng-show="currentUser">
+                            <a href="#/account" class="pointer"><span translate="hello" translate-values="{name: currentUser.username}"></span> <marker marker-squared="true" marker-severity="info">2</marker><span class="caret"></span></a>
+                        </li>
+                        <li>
+                            <a ng-click="logout()" class="pointer" ng-show="currentUser">Logout <glyph icon="log-out"></glyph></a>
+                            <a href="#/login" ng-show="!currentUser">Login <glyph icon="log-in"></glyph></a>
+                        </li>
+                    </ul>
+                    <div class="navbar-right">
+                        <div class="nav navbar-nav">
+                            <language-switcher></language-switcher>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main">
+
+        <ng-view></ng-view>
+
+    </div>
+    <!--./container -->
+
+    <!-- scripts -->
+    <script src="lib/lib.min.js"></script>
+
+    <script src="lib/alv-ch-ng/alv-ch-ng.common.js"></script>
+    <script src="lib/alv-ch-ng/alv-ch-ng.translate.js"></script>
+    <script src="lib/alv-ch-ng/alv-ch-ng.security.js"></script>
+    <script src="lib/alv-ch-ng/alv-ch-ng.ui-core.js"></script>
+    <script src="lib/alv-ch-ng/alv-ch-ng.ui-forms.js"></script>
+    <script src="lib/alv-ch-ng/alv-ch-ng.ui-navigation.js"></script>
+    <script src="lib/alv-ch-ng/alv-ch-ng.ui-scroll.js"></script>
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/modules/common.constants.js"></script>
+    <script src="scripts/modules/mtg.playground.js"></script>
+    <script src="scripts/modules/mtg.modals.js"></script>
+    <script src="scripts/modules/mtg.variables.js"></script>
+
+    <script src="scripts/js/mobile.js"></script>
+    <script src="scripts/js/detectmobilebrowser.js"></script>
+    <!-- /scripts -->
+
+</body>
+</html>

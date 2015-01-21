@@ -1,0 +1,37 @@
+<div class="si-page">
+    <a href="#/systemMessages/{{message.uuid}}" ng-if="messages && messages.length > 0 && listReady && selectable" class="list-group-item selectable" ng-repeat="message in messages">
+        <div class="row header">
+            <div>
+                <div class="col-md-6">
+                    <glyph si-state-glyph="message.severity"></glyph>
+                    <span class="bold title" si-i18n-property="message.subject"></span>
+                </div>
+                <div class="col-md-6">
+                    <span class="pull-right" si-state="message.severity"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="!message.expanded">
+            <div class="col-md-12" id="message-details-descriptionShort_{{$index}}">
+                <div class="col-md-4" ng-if="showSystemNames" id="message-detail-system-name_{{ $index }}">
+                    <span i18n-msg="common.system"></span>
+                    <strong si-i18n-property="message.systemName"></strong>
+                </div>
+                <div id="message-detail-validityDate_{{$index}}" class="col-md-6">
+                    <span i18n-msg="common.validFrom"></span>
+                    <strong si-date-time="message.validFrom"></strong>
+                    <span ng-if="message.validTo" i18n-msg="common.to"></span>
+                    <strong ng-if="message.validTo" si-date-time="message.validTo"></strong>
+                </div>
+            </div>
+        </div>
+    </a>
+
+    <div ng-if="(!messages || messages.length === 0) && listReady" class="list-group-item">
+        <strong i18n-msg="system.incidents.noIncidents"></strong>
+    </div>
+    <div ng-hide="listReady" style="text-align: center;">
+        <img style="width: 30px;" src="/images/throbber.png" alt="throbber" />
+    </div>
+</div>

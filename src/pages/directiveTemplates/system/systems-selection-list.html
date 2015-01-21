@@ -1,0 +1,17 @@
+<div>
+    <ul class="list-group systems-list">
+        <li class="list-group-item selectable" ng-repeat="system in systems" id="system_{{$index}}" ng-click="selectSystem(system, $index)">
+            <div class="row">
+                <div class="col-md-6" id="system_{{$index}}_name" >
+                    <glyph icon="ok" class="state-glyph" ng-if="system.checked"></glyph>
+                    <glyph icon="remove" class="state-glyph" ng-if="!system.checked"></glyph>
+                    <span class="bold" si-i18n-property="system.name"></span>
+                </div>
+                <div class="col-md-6">
+                    <span ng-if="system.checked" class="si-state pull-right selected" i18n-msg="common.subscription.exists"></span>
+                    <span ng-if="!system.checked" class="si-state pull-right not-selected" i18n-msg="common.subscription.not.exists"></span>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

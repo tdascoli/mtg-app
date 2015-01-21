@@ -1,0 +1,68 @@
+.card-min {
+  width: @card-min-width;
+  height: @card-min-height;
+
+  cursor:pointer;
+  z-index:40;
+  /*@media (max-width: @screen-sm-max) {
+    width:@card-xs-min-width;
+    height:@card-xs-min-height;
+  }*/
+
+  position: absolute !important;
+  .transform-transition(0.3s);
+  .preserve-3d();
+  .perspective(1000);
+
+  // .transform(rotateY(0deg) translate3d(0,0,0));
+
+  & img {
+    width: @card-min-width;
+    height: @card-min-height;
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+  }
+
+  // Tapped Card
+  &.tapped {
+    .transform(rotate(90deg) scale(1) translate3d(0,0,0));
+  }
+
+  // In deck card
+  &.in-library {
+    top:0;
+  }
+
+  // In hand card
+  &.in-hand {
+
+  }
+
+  // In game card
+  &.in-game {
+    .box-shadow(@card-shadow);
+  }
+
+  // Flipped
+  &.flipped {
+    .transform(rotateY(180deg));
+  }
+}
+
+.my.card-min .back-side,
+.in-library.card-min .front-side{
+  display: none;
+}
+.in-library.card-min .back-side {
+  display: block;
+}
+
+.front-side.my, .back-side.my {
+  -webkit-transform: translateZ(0px);
+  -moz-transform: translateZ(0px);
+  -o-transform: translateZ(0px);
+  -ms-transform: translateZ(0px);
+  transform: translateZ(0px);
+}

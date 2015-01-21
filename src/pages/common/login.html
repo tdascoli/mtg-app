@@ -1,0 +1,52 @@
+<form class="form-signin"
+      name="form"
+      ng-submit="login(form)"
+      novalidate>
+
+<alert alert-severity="danger" ng-show="errors">
+    <strong translate="TEST"></strong> {{ errors.email }} {{ errors.password }} {{ error.other }}
+</alert>
+
+    <h2>Login</h2>
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+
+        <div class="panel panel-default">
+            <div class="pabel-body">
+            <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120" alt="" />
+
+                <div ng-class="{'has-error': form.email.$error.mongoose}">
+                    <input type="text"
+                           form-input
+                           form-label="E-Mail"
+                           name="email"
+                           ng-model="user.email"
+                           required
+                           autofocus
+                           mongoose-error />
+                </div>
+
+                <div ng-class="{'has-error': form.password.$error.mongoose}">
+                    <input type="password"
+                           form-input
+                           form-label="Password"
+                           class="form-control"
+                           placeholder="Password"
+                           name="password"
+                           ng-model="user.password"
+                           required
+                           mongoose-error />
+                </div>
+
+                <button class="btn btn-primary" type="submit"> Sign in </button>
+
+                <span class="clearfix"></span>
+        </div>
+
+        <a href="#signup">Create an account </a>
+        </div>
+    </div>
+</div>
+
+</form>

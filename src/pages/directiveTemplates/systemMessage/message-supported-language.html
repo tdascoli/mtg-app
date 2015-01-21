@@ -1,0 +1,10 @@
+<div>
+    <div form-label="messages.label.language">
+        <div ng-repeat="(key, value) in message.languages" class="checkbox alv-check">
+            <input type="checkbox" form-label="common.language.{{ key }}" name="lang_{{ key }}" id="lang_{{ key }}" ng-model="message.languages[key]" ng-disabled="checkIfOthersUnchecked(key)" ng-change="manageCheckedLanguages(key)"/>
+        </div>
+    </div>
+    <div form-label="messages.label.language.default" ng-show="!checkIfAllChecked() && showRadioButtons()">
+        <input ng-repeat="language in supportedLanguages" ng-show="message.languages[language]" value="{{ language }}" type="radio" form-label="common.language.{{ language }}" name="default_language" id="default_language_{{ language }}" ng-model="message.defaultLanguage"/>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+{
+  "name": "mtg",
+  "version": "0.1.0",
+  "description": "mtg-app",
+  "author": "@tdascoli",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.10.0",
+    "npm": ">= 1.0.0"
+  },
+  "private": true,
+  "scripts": {
+    "test": "grunt travis --verbose"
+  },
+  "dependencies": {
+    "grunt-angular-templates": "^0.5.6",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-compress": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-jasmine": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-less": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-lesslint":"*",
+    "grunt-cssbeautifier":"*",
+    "grunt-browser-sync": "*",
+    "grunt-coveralls": "*",
+    "grunt-exec": "*",
+    "grunt-express-server": "*",
+    "grunt-karma": "*",
+    "grunt-push-release": "*",
+    "grunt-htmlhint":"*",
+    "passport":"*",
+    "passport-local":"*",
+    "connect-mongo":"*",
+    "mongoose": "~3.5.5",
+    "ejs": "~0.8.4",
+    "socket.io":"latest"
+  },
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-template-jasmine-istanbul": "*",
+    "load-grunt-tasks": "*",
+    "time-grunt": "*",
+    "bower": "*",
+    "colors": "*",
+    "express": "~3.4.3",
+    "karma": "*",
+    "phantomjs": "*",
+    "selenium": "*",
+    "travis": "*",
+    "browser-sync": "1.9.0",
+    "mtg-parser": "latest"
+  }
+}

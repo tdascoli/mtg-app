@@ -1,0 +1,16 @@
+<div class="modal fade" id="card-context" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="GameModalCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="card-widget-mobile">
+                    <img src="/images/card-back.jpeg" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal">Close</button>
+                <button class="btn-primary" ng-click="tapModal()" ng-show="showTappedModal(false)"><img class="tap" src="http://mtgimage.com/symbol/other/t.svg" />&nbsp;Tap Card</button>
+                <button class="btn-primary" ng-click="tapModal()" ng-show="showTappedModal(true)"><img class="tap" src="http://mtgimage.com/symbol/other/q.svg" />&nbsp;Untap Card</button>
+            </div>
+        </div>
+    </div>
+</div>

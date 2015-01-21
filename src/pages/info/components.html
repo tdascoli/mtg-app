@@ -1,0 +1,295 @@
+<div class="page-header">
+    <h1>Components
+        <small>Reusable components built to ease the hassle of not knowing the right stylesheets.</small>
+    </h1>
+</div>
+
+<div scroll-spy>
+    <div class="sidebar collapse navbar-collapse">
+        <div id="toc-container" scroll-fix="alv-divider" scroll-fix-bottom="footer-container" role="navigation">
+            <toc id="toc" selector=".toc"></toc>
+        </div>
+    </div>
+    <div class="content">
+
+        <h2 class="toc">Glyphicons</h2>
+        You can use the Standard <a href="http://getbootstrap.com/components/#glyphicons" target="_blank">Bootstrap Glyphicons</a> as follows.
+        <div highlight="this">
+<glyph icon="star"/>
+
+<button>
+    <glyph icon="star"/>
+    Star
+</button>
+
+<button glyph-icon="search" glyph-align="right">
+    Search
+</button>
+        </div>
+
+        <h3>Admin Symbols</h3>
+        There are also the <a href="http://swiss.github.io/styleguide/base_layout_-_general.html#e-icons" target="_blank">Admin Icons</a> as CSS classes included.
+        <div highlight="this">
+            <span admin-symbol="calendar">
+                Calendar
+            </span>
+
+            <button admin-symbol="print" glyph-align="right">
+                Print
+            </button>
+        </div>
+        <div class="bs-glyphicons">
+        <ul class="bs-glyphicons-list">
+            <li ng-repeat="adminIcon in adminIcons">
+                <span class="adminIcons icon icon--{{adminIcon}}" aria-hidden="true"></span>
+                <span class="glyphicon-class">.icon .icon--{{adminIcon}}</span>
+            </li>
+        </ul>
+        </div>
+
+        <h2 class="toc">Dropdowns</h2>
+        Dropdowns are based on <a href="http://silviomoreto.github.io/bootstrap-select/" target="_blank">Bootstrap Select jQuery Plugin</a>.
+        <div highlight="this">
+<form role="form">
+    <select form-select form-label="testLabel"  id="testSelect101" ng-model="searchCriteria.checkboxTest1"
+            ng-options="label for label in demoArray"></select>
+</form>
+
+<form class="form-horizontal" role="form">
+    <select form-select form-label="testLabel"  id="testSelect102" ng-model="searchCriteria.checkboxTest1"
+            ng-options="label for label in demoArray"></select>
+</form>
+
+<form class="form-inline" role="form">
+    <select form-select form-label="testLabel"  id="testSelect103" ng-model="searchCriteria.checkboxTest1"
+            ng-options="label for label in demoArray"></select>
+</form>
+        </div>
+
+        <h2 class="toc" id="buttons">Buttons</h2>
+        <div highlight="this">
+            <button class="btn-primary">
+                Primary Button
+            </button>
+
+            <button>
+                Default Button
+            </button>
+        </div>
+
+        <h3>Button groups</h3>
+        <p class="info-notice">Under Construction</p>
+
+        <h2 class="toc" id="form_elements">Forms</h2>
+        <h3 id="basic_form">Basic Form</h3>
+        <div highlight="this">
+            <form role="form">
+                <input type="text" form-input form-label="testLabel"
+                       form-helptext="testHelptext" name="testInput" id="testInput1" ng-model="searchCriteria.inputTest1"
+                       i18n-attribute="placeholder" i18n-value="testPlaceholder"/>
+
+    <textarea form-textarea form-label="testLabel"
+              form-helptext="testHelptext" form-textarea-large="true"></textarea>
+
+                <input type="checkbox" form-label="testLabel" name="textCheckbox1" id="textCheckbox10"
+                       ng-model="searchCriteria.checkboxTest10"/>
+
+                <input type="radio"form-label="testLabel" name="textRadio1" id="textRadio1_10"
+                       ng-model="searchCriteria.radioTest10"/>
+                <input type="radio" form-label="testLabel" name="textRadio1" id="textRadio1_20"
+                       ng-model="searchCriteria.radioTest10"/>
+            </form>
+        </div>
+
+        <h3 id="horizontal_form">Horizontal Form</h3>
+        <div highlight="this">
+            <form class="form-horizontal" role="form">
+                <input type="text" form-input form-label="testLabel" name="testInput" id="testInput2" ng-model="searchCriteria.inputTest1"
+                       i18n-attribute="placeholder" i18n-value="testPlaceholder"/>
+
+                <textarea form-textarea form-label="testLabel" form-textarea-large="true"></textarea>
+
+                <input type="checkbox" form-label="testLabel" name="textCheckbox1" id="textCheckbox2"
+                       ng-model="searchCriteria.checkboxTest10"/>
+
+                <input type="radio" form-label="testLabel" name="textRadio1" id="textRadio2_10"
+                       ng-model="searchCriteria.radioTest10"/>
+                <input type="radio" form-label="testLabel" name="textRadio1" id="textRadio2_20"
+                       ng-model="searchCriteria.radioTest10"/>
+            </form>
+        </div>
+
+        <h3 id="inline_form">Inline Form</h3>
+        <div highlight="this">
+            <form class="form-inline" role="form">
+                <input type="text" form-input form-label="testLabel" name="testInput" id="testInput3" ng-model="searchCriteria.inputTest1"
+                       i18n-attribute="placeholder" i18n-value="testPlaceholder"/>
+
+                <textarea form-textarea form-label="testLabel" form-textarea-large="true"></textarea>
+
+                <input type="checkbox" form-label="testLabel" name="textCheckbox1" id="textCheckbox3"
+                       ng-model="searchCriteria.checkboxTest10"/>
+
+                <input type="radio" form-label="testLabel" name="textRadio1" id="textRadio3_10"
+                       ng-model="searchCriteria.radioTest10"/>
+                <input type="radio" form-label="testLabel" name="textRadio1" id="textRadio3_20"
+                       ng-model="searchCriteria.radioTest10"/>
+            </form>
+        </div>
+
+        <h3>Input groups</h3>
+        <div highlight="this">
+
+<input type="text" form-input form-label="testLabel" form-prepend="test-currency" id="test102" ng-model="searchCriteria.placeholder100" />
+
+<input type="text" form-input form-label="testLabel" form-append="test-double0" id="test101" ng-model="searchCriteria.placeholder100"  />
+
+<input type="text" form-input form-label="testLabel" form-prepend="test-currency" form-append="test-double0" id="test100" ng-model="searchCriteria.placeholder100" />
+
+<input type="text" form-input form-label="testLabel" form-prepend="euro" form-prepend-icon="true" id="test103" ng-model="searchCriteria.placeholder100" />
+
+<input type="text" form-input form-label="testLabel" form-append="euro" form-append-icon="true" id="test104" ng-model="searchCriteria.placeholder100"  />
+
+<hr />
+
+<input type="text" form-input form-label="testLabel" form-append="test-btn" form-append-btn="doSomething()" id="test105" ng-model="searchCriteria.placeholder100"  />
+
+<input type="text" form-input form-label="testLabel" form-prepend="test-btn2" form-prepend-btn="doSomething()" id="test106" ng-model="searchCriteria.placeholder100"  />
+
+<input type="text" form-input form-label="testLabel" form-prepend="test-btn3" form-prepend-btn="doSomething()" form-append="test-btn4" form-append-btn="doSomething()" id="test107" ng-model="searchCriteria.placeholder100"  />
+
+<hr />
+
+<input form-input form-append="map-marker" form-append-icon="true" form-append-btn="doLocation()" form-append-btn-submit="true" type="email" id="location" ng-model="location" i18n-attribute="placeholder" i18n-value="testPlaceholder" /><br />
+<input form-input form-inset="map-marker" type="email" id="location3" ng-model="location" i18n-attribute="placeholder" i18n-value="testPlaceholder" /><br />
+<input form-input form-inset="map-marker" form-inset-action="doLocation()" type="email" id="location5" ng-model="location" i18n-attribute="placeholder" i18n-value="testPlaceholder" /><br />
+<input form-input form-inset="map-marker" form-inset-action="doLocation()" form-inset-btn type="email" id="location7" ng-model="location" i18n-attribute="placeholder" i18n-value="testPlaceholder" /><br />
+<input form-input form-inset="map-marker" form-inset-action="doLocation()" form-inset-btn="submit" type="email" id="location9" ng-model="location" i18n-attribute="placeholder" i18n-value="testPlaceholder" /><br />
+        </div>
+
+        <h2 class="toc">Navbars</h2>
+        Navbars are responsive meta components that serve as navigation headers for your application or site. They begin collapsed (and are toggleable) in mobile views and become horizontal as the available viewport width increases.
+        <a href="http://getbootstrap.com/components/#navbar" target="_blank">For more Information or Exampmles see Bootstrap documentation</a>.
+        <h3 class="toc" id="navbar-systembar">Systembar</h3>
+        Systembar are located on top of the Page.
+        <div highlight="this">
+<div class="systembar">
+    <div class="container">
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <a class="pointer">Getting started</a>
+            </li>
+            <li>
+                <a class="pointer">Less</a>
+            </li>
+        </ul>
+    </div>
+</div>
+        </div>
+
+        <h3 class="toc">Sidebar</h3>
+        Sidebars can be placed on the right or the left (see example on this site on the left side). After or before a Sidebar, there has to be a <code>.content</code> Layer.
+        <div highlight="this" class="ex_alv">
+<div class="sidebar collapse navbar-collapse">
+    <span>This is your Sidebar</span>
+</div>
+        </div>
+        <h3 class="toc">Sidebar-Toggle</h3>
+        <div highlight="this" class="ex_alv">
+<div class="navbar-header">
+    <sidebar-toggle></sidebar-toggle>
+</div>
+        </div>
+
+        <h2 class="toc">Table of Content</h2>
+        <div class="highlight">
+        <pre>
+<code class="hljs">
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"table-of-content"</span> <span class="hljs-attribute">role</span>=<span class="hljs-value">"navigation"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">toc</span> <span class="hljs-attribute">selector</span>=<span class="hljs-value">".toc"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">toc</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code>
+        </pre>
+        </div>
+
+
+        <h2 class="toc">Divider / Breadcrumbs</h2>
+        The Divider is located after the <code>.navbar</code> Navigation as a Divider between the "Core System" and the Display Content. You can add a <code>.release-note</code> to specify a current Status if you're developing. There are four status available, <code>.alpha</code>, <code>.beta</code>, <code>.rc</code> (release candidate) and <code>.poc</code> (proof of concept).
+        <div highlight="this" class="ex_alv">
+<div id="alv-divider">
+    <div class="release-note alpha">
+        <a release-note>alpha</a>
+        <p>0.0.x-poc / Comment</p>
+    </div>
+
+    <breadcrumbs></breadcrumbs>
+</div>
+        </div>
+
+        <h2 class="toc">Markers</h2>
+        <div highlight="this">
+<h3>Example heading
+    <marker>New</marker>
+</h3>
+<h3 marker="old">Example heading</h3>
+
+<marker>Default</marker>
+<marker marker-severity="primary">Primary</marker>
+<marker marker-severity="success">Success</marker>
+<marker marker-severity="info">Info</marker>
+<marker marker-severity="warning">Warning</marker>
+<marker marker-severity="danger">Danger</marker>
+        </div>
+
+        <h2 class="toc">Badges</h2>
+        <div highlight="this">
+<a href="#">Inbox
+    <badge>42</badge>
+</a>
+
+<p/>
+
+<a href="#" badge="21">Outbox</a>
+
+<p/>
+
+<ul class="nav nav-pills nav-stacked">
+    <li class="active">
+        <a href="#">
+            <badge badge-align="right">42</badge>
+            Home
+        </a>
+    </li>
+    <li>
+        <a href="#" badge-align="right" badge="42">
+            Start
+        </a>
+    </li>
+</ul>
+        </div>
+
+        <h2 class="toc">Alerts</h2>
+        <div highlight="this">
+<message severity="info" dismissable="true">
+    <span>
+        <strong>Anzahl gefundene Jobs: 39.267</strong> Die Anzahl der Resultate ist auf 300 beschränkt. Bitte wählen Sie zusätzliche Suchkriterien, um die Anzahl der Resultate einzuschränken.
+    </span>
+</message>
+        </div>
+
+        <h2 class="toc">Notices</h2>
+        <div highlight="this">
+<p class="application-notice" ph-txt="2s"></p>
+
+<p class="primary-notice" ph-txt="2s"></p>
+
+<p class="success-notice" ph-txt="2s"></p>
+
+<p class="info-notice" ph-txt="2s"></p>
+
+<p class="warning-notice" ph-txt="2s"></p>
+
+<p class="danger-notice" ph-txt="2s"></p>
+        </div>
+     </div>
+</div>
