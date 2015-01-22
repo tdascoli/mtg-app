@@ -15,41 +15,47 @@
             banner: '/* ' +
                 '<%= pkg.title || pkg.name %> - <%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> - ' +
-                'Copyright (c) <%= grunt.template.today("yyyy") %> Informatik der Arbeitslosenversicherung; */\n',
+                'Copyright (c) <%= grunt.template.today("yyyy") %> tdascoli; */\n',
 
             // Task configurations.
             clean: {
                 all: ['dist', 'build'],
                 dist: ['dist'],
                 build: ['build'],
-                src: ['src/lib']
+                src: ['public/lib']
             },
             copy: {
-                material: {
+                public: {
                     files: [
                         {
                             expand: true,
                             cwd: 'lib/alv-ch-ng/dist/',
                             src: ['**/*'],
-                            dest: 'src/lib/alv-ch-ng/'
+                            dest: 'public/lib/alv-ch-ng/'
                         },
                         {
                             expand: true,
                             cwd: 'lib/bootstrap/',
                             src: 'fonts/*',
-                            dest: 'src/lib/bootstrap/'
+                            dest: 'public/lib/bootstrap/'
                         },
                         {
                             expand: true,
                             cwd: 'lib/bootstrap-select/dist/',
                             src: '**/*',
-                            dest: 'src/lib'
+                            dest: 'public/lib/'
                         },
                         {
                             expand: true,
                             cwd: 'lib/bootstrapaccessibilityplugin/plugins/css/',
                             src: '**/bootstrap-accessibility.css',
-                            dest: 'src/lib'
+                            dest: 'public/lib/'
+                        },
+                        {
+                            expand: true,
+                            cwd: 'lib/socket.io/lib/',
+                            src: '**/*.js',
+                            dest: 'public/lib/socket.io/'
                         }
                     ]
                 }
@@ -63,7 +69,7 @@
                         'mangle': false
                     },
                     files: {
-                        'src/lib/lib.min.js': [
+                        'public/lib/lib.min.js': [
                             'lib/jquery/dist/jquery.js',
                             'lib/jquery-ui/jquery-ui.js',
                             'lib/jqueryui-touch-punch/jquery.ui.touch-punch.js',
@@ -80,6 +86,7 @@
                             'lib/angular-dialog-service/dist/dialogs.min.js',
                             'lib/angular-dragdrop/src/angular-dragdrop.js',
                             'lib/angular-touch/angular-touch.js',
+                            'lib/angular-socket-io/socket.js',
                             'lib/ng-lodash/build/ng-lodash.js',
                             'lib/autofill-event/src/autofill-event.js',
                             'lib/angular-cookies/angular-cookies.js',
@@ -108,19 +115,19 @@
                     options: {
                         jshintrc: '.jshintrc'
                     },
-                    src: ['src/scripts/**/*.js']
+                    src: ['public/scripts/**/*.js']
                 }
             },
             less: {
                 src: {
                     options: {
-                        paths: ['src/less/'],
+                        paths: ['public/less/'],
                         compress: false,
                         cleancss: true,
                         ieCompat: true
                     },
                     files: {
-                        'src/styles/mtg-app.css': ['src/less/mtg-app.less']
+                        'public/styles/mtg-app.css': ['public/less/mtg-app.less']
                     }
                 }
             },
@@ -129,29 +136,29 @@
                     csslint: {
                         csslintrc: '.csslintrc'
                     },
-                    imports: ['src/less/**/*.less']
+                    imports: ['public/less/**/*.less']
                 },
-                src: ['src/less/mtg-styles.less']
+                src: ['public/less/mtg-styles.less']
             },
             htmlhint: {
                 options: {
                     htmlhintrc: '.htmlhintrc'
                 },
                 src: {
-                    src: ['src/**/*.html','!src/lib/**/*']
+                    src: ['public/**/*.html','!public/lib/**/*']
                 }
             },
             watch: {
                 templates: {
-                    files: 'src/**/*.html',
+                    files: 'public/**/*.html',
                     tasks: ['htmlhint']
                 },
                 lessFiles: {
-                    files: 'src/less/**/*.less',
+                    files: 'public/less/**/*.less',
                     tasks: ['less:src']
                 },
                 jshint: {
-                    files: ['src/scripts/**/*.js','!src/lib/**/*.js'],
+                    files: ['public/scripts/**/*.js','!public/lib/**/*.js'],
                     tasks: ['jshint-test']
                 }
             },
@@ -179,7 +186,7 @@
             browserSync: {
                 dev: {
                     bsFiles: {
-                        src : 'src/**/*'
+                        src : 'public/**/*'
                     },
                     options: {
                         watchTask: true

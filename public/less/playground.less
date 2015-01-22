@@ -1,0 +1,86 @@
+#game-area {
+  height: 500px; // change!!
+}
+.phase {
+  height: 25px;
+  background-color: #000099;
+  color: #fff;
+  font-size: 0.809em;
+  line-height: 25px;
+}
+.battlefield {
+  height: 200px; // change
+}
+.handlogic,
+.handlogic > div {
+  height: @card-min-height;
+}
+.handlogic > div {
+  background-color: #e1e1e8;
+  float: left;
+  margin-right: 2px;
+}
+.handlogic div:last-child {
+  margin-right: 0;
+}
+
+.exile,
+.graveyard,
+.library {
+  width: @card-min-width;
+}
+
+.exile img.card-min,
+.graveyard img.card-min,
+.library img.card-min {
+  width: @card-min-width;
+  height: @card-min-height;
+}
+
+#my-battlefield:before {
+  content: "20";
+  position: absolute;
+  right: 5px;
+  font-weight: bold;
+  color: #777;
+}
+#op-battlefield:after {
+  content: "20";
+  position: absolute;
+  left: 5px;
+  top: 225px;
+  font-weight: bold;
+  color: #777;
+}
+
+.hand {
+  width: (310 - (3 * (@card-min-width+2)));
+  //width: 310-(@card-min-width+2);
+}
+.phase span {
+  width: 19%;
+  text-align: center;
+  display: inline-block;
+}
+
+.phase span.active {
+  font-weight: bold;
+}
+
+.tap {
+  height: 1em;
+}
+
+.badge-notify{
+  background:red !important;
+  position:relative !important;
+  top: -1em !important;
+  left: -1em !important;
+  font-size: 0.6em;
+}
+
+#my-hitpoints,
+#my-infection {
+  margin-top: 0.3em;
+  margin-right: 0.5em;
+}

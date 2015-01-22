@@ -1,0 +1,21 @@
+<div class="modal fade" id="chat-widget" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="ChatCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="chat-message well">
+                    <span ng-repeat="message in messages">
+                        <strong ng-class="{'text-primary':message.user===user,'text-danger':message.user!==user}">{{message.user}}:</strong> {{message.text}}
+                        <br />
+                    </span>
+                </div>
+                <form ng-submit="sendMessage()">
+                    <input form-input ng-model="message" class="input-sm" placeholder="Type message" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal">Close</button>
+                <button type="submit" class="btn-primary">Send</button>
+            </div>
+        </div>
+    </div>
+</div>

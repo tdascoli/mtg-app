@@ -7,7 +7,7 @@
         serverHost: 'localhost',
         serverPort: 9000,
         appName: 'mtg-app:dev',
-        staticFolder: 'src/'
+        staticFolder: 'public/'
     };
 
     var staticFolder = process.argv[2] || defaults.staticFolder;
@@ -91,11 +91,6 @@
     });
     var server = createServer(staticFolder).start();
 
-    // SOCKET.IO
-    var socket = require('socket.io');
-    var io = socket.listen(server);
-    io.sockets.on('connection', function(socket) {
-        console.log('client connected!');
-    });
+
 
 }());

@@ -1,102 +1,50 @@
-'use strict';
 
-var defaults = {
-    serverHost: 'localhost',
-    serverPort: 9000,
-    appName: 'mtg:dev',
-    staticFolder: 'src/'
-};
+/**
+ * Module dependencies
+ */
 
-var serverHost = process.env.OPENSHIFT_NODEJS_IP;
-if (!serverHost) {
-    serverHost = defaults.serverHost;
-    console.warn('No OPENSHIFT_NODEJS_IP environment variable, ' + defaults.serverHost + ' will be used.');
-}
-
-var serverPort = parseInt(process.env.OPENSHIFT_NODEJS_PORT);
-if (!serverPort) {
-    serverPort = defaults.serverPort;
-    console.warn('No OPENSHIFT_NODEJS_PORT environment variable, ' + defaults.serverPort + ' will be used.');
-}
-
-var appName = process.env.OPENSHIFT_APP_NAME;
-if (!appName) {
-    appName = defaults.appName;
-    console.warn('No OPENSHIFT_APP_NAME environment variable, ' + defaults.appName + ' will be used.');
-}
-
-var serverConfig = {
-    serverHost: serverHost,
-    serverPort: serverPort,
-    appName: appName
-};
-
-// Module dependencies.
 var express = require('express'),
+    routes = require('./routes'),
+    api = require('./routes/api'),
     http = require('http'),
-    passport = require('passport'),
-    path = require('path'),
-    fs = require('fs'),
-    mongoStore = require('connect-mongo')(express),
-    config = require('./src/server/config/config');
+    path = require('path');
 
-var app = express();
+var app = module.exports = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
-// Connect to database
-var db = require('./src/server/db/mongo').db;
+/**
+ * Configuration
+ */
 
-// Bootstrap models
-var modelsPath = path.join(__dirname, 'src/server/models');
-fs.readdirSync(modelsPath).forEach(function (file) {
-  require(modelsPath + '/' + file);
-});
+// all environments
 
-var pass = require('./src/server/config/pass');
+app.set('port', process.env.PORT || 3000);
 
-// App Configuration
-app.configure('development', function(){
-  app.use(express.static(path.join(__dirname, '.tmp')));
-  app.use(express.static(path.join(__dirname, 'src')));
-  app.use(express.errorHandler());
-  app.set('views', __dirname + '/src/views');
-});
+// Create an HTTP service.
+app.use(express.static(process.cwd() + '/' + 'public/'));
 
-app.configure('production', function(){
-  app.use(express.favicon(path.join(__dirname, 'public', 'favicon.ico')));
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.set('views', __dirname + '/views');
-});
+// development only
+if (app.get('env') === 'development') {
+    app.use(express.errorHandler());
+}
 
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-app.use(express.logger('dev'));
+// production only
+if (app.get('env') === 'production') {
+    // TODO
+}
 
-// cookieParser should be above session
-app.use(express.cookieParser());
+// JSON API
+app.get('/api/name', api.name);
 
-// bodyParser should be above methodOverride
-app.use(express.bodyParser());
-app.use(express.methodOverride());
 
-// express/mongo session storage
-app.use(express.session({
-  secret: 'MEAN',
-  store: new mongoStore({
-    url: config.db,
-    collection: 'sessions'
-  })
-}));
+// Socket.io Communication
+io.sockets.on('connection', require('./routes/socket'));
 
-// use passport session
-app.use(passport.initialize());
-app.use(passport.session());
+/**
+ * Start Server
+ */
 
-//routes should be at the last
-app.use(app.router);
-
-//Bootstrap routes
-require('./src/server/config/routes')(app);
-
-http.createServer(app).listen(serverConfig.serverPort, function(){
-    console.log('Express server listening on port %d in %s mode', serverConfig.serverPort, app.get('env'));
+server.listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
 });

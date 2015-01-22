@@ -1,0 +1,67 @@
+
+@headingFontFamily: 'RobotoDraft', 'Roboto', sans-serif;
+@contentFontFamily: 'RobotoDraft', 'Roboto', sans-serif;
+
+@font-face {
+  font-family: 'Magic Cards Normal';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Magic Cards Normal'), url('../fonts/MagicCardsNormal.woff') format('woff');
+}
+
+body, html {
+  font-family: 'RobotoDraft', sans-serif;
+}
+body {
+  margin: 0;
+  padding-top: 51px;
+}
+.playground .sidebar {
+  width: 250px;
+}
+
+.player-stats {
+  font-size: 0.809em;
+}
+
+.container.main {
+  padding: 0 5px;
+  min-height: auto;
+}
+#game-area.content {
+  padding: 0;
+}
+
+#card-widget img {
+  height: @card-viewer-height;
+}
+#card-widget-mobile img {
+  height: 280px;
+}
+#card-widget-mobile {
+  text-align: center;
+}
+
+.modal {
+  padding-top: 50px;
+}
+.modal-footer .btn {
+  margin-bottom: 0;
+}
+
+span.mtg {
+  font-family: 'Magic Cards Normal';
+  font-weight: 700;
+}
+
+.navbar-playground {
+  color: #fff;
+}
+.has-comment {
+  padding-right: 0 !important;
+}
+.chat-message {
+  height: 200px;
+  overflow-y: auto;
+  font-size: 0.809em;
+}

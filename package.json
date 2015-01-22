@@ -34,12 +34,12 @@
     "grunt-karma": "*",
     "grunt-push-release": "*",
     "grunt-htmlhint":"*",
-    "passport":"*",
-    "passport-local":"*",
     "connect-mongo":"*",
     "mongoose": "~3.5.5",
     "ejs": "~0.8.4",
-    "socket.io":"latest"
+    "socket.io":"latest",
+    "socket.io-client":"latest",
+    "mtg-parser": "latest"
   },
   "devDependencies": {
     "grunt": "*",
@@ -53,7 +53,6 @@
     "phantomjs": "*",
     "selenium": "*",
     "travis": "*",
-    "browser-sync": "1.9.0",
-    "mtg-parser": "latest"
+    "browser-sync": "1.9.0"
   }
 }
