@@ -1,13 +1,21 @@
-<div class="sidebar collapse">
+<div id="playgroundnav" class="sidebar collapse">
     <div id="card-widget" class="hidden-xs">
         <img src="/images/card-back.jpeg" />
     </div>
-    <button ng-click="shuffleLibrary()">Shuffe Library</button>
-    <button ng-click="untapAll()">Untap All</button>
+    <div class="nav navbar-nav playground">
+        <ul class="nav navbar-default">
+            <li><a class="playgroundnav" ng-click="shuffleLibrary()">Shuffe Library</a></li>
+            <li><a class="playgroundnav" ng-click="untapAll()">Untap All</a></li>
+            <li><hr /></li>
+            <li><button class="playgroundnav" ng-click="searchCards('library')" ng-disabled="!my.library.length">Search Library</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('graveyard')" ng-disabled="!my.library.length">Search Graveyard</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('exile')" ng-disabled="!my.library.length">Search Exiled Cards</button></li>
+        </ul>
+    </div>
 </div>
 <div mtg-playground id="game-area" class="content game-area" ng-swipe-left="nextPhase()">
     <div id="op-game-area">
-        <div mtg-op-battlefield id="op-battlefield" class="battlefield"></div>
+        <div data-hitpoints="{{op.hitpoints}}" id="op-battlefield" class="battlefield"></div>
     </div>
     <div id="phase" class="phase">
         <span ng-class="{active:phase.begin}" ng-click="setPhase('begin')">Begin</span>
@@ -17,8 +25,7 @@
         <span ng-class="{active:phase.end}" ng-click="setPhase('end')">End</span>
     </div>
     <div id="my-game-area">
-        <div mtg-my-battlefield id="my-battlefield" class="battlefield" jqyoui-droppable="{onDrop:'toBattlefield'}"
-             data-jqyoui-options="{activeClass:'tapped'}" data-drop="true" ng-model="my.battlefield"></div>
+        <div data-hitpoints="{{my.hitpoints}}" id="my-battlefield" class="battlefield" jqyoui-droppable="{onDrop:'toBattlefield'}" data-jqyoui-options="{activeClass:'tapped'}" data-drop="true" ng-model="my.battlefield"></div>
         <div id="my-handlogic" class="handlogic">
             <div id="my-exile" class="exile" jqyoui-droppable="{onDrop:'toExile'}" data-drop="true">ex</div>
             <div id="my-graveyard" class="graveyard" jqyoui-droppable="{onDrop:'toGraveyard'}" data-drop="true">gr</div>
@@ -31,10 +38,8 @@
         </div>
     </div>
 </div>
-<!--
-<button ng-click="nextPhase()" ng-disabled="phase.end">NEXT</button>
 <pre>{{ my.library }}</pre>
--->
+<ng-include src="'/pages/playground/search-cards.html'"></ng-include>
 <ng-include src="'/pages/playground/card-context.html'"></ng-include>
 <ng-include src="'/pages/playground/chat-widget.html'"></ng-include>
 <ng-include src="'/pages/playground/player-stats.html'"></ng-include>

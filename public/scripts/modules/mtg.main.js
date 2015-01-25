@@ -1,12 +1,11 @@
 ;(function () {
     'use strict';
 
-    var module = angular.module('mtg.main', []);
+    var module = angular.module('mtg.main', ['mtg.chat','mtg.directives','mtg.modals','mtg.playground','mtg.socket','mtg.variables']);
 
     module.controller('MtgMainCtrl', function ($scope) {
 
-        $scope.hasMessage=true;
-        $scope.countMessage=2;
+
     });
 
 }());

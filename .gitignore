@@ -3,4 +3,4 @@ data
 lib
 node_modules
 src/lib
-mtg.iml
+mtg-app.iml

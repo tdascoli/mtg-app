@@ -79,6 +79,7 @@
                             'lib/angular/angular.js',
                             'lib/angular-http-auth/src/http-auth-interceptor.js',
                             'lib/angular-resource/angular-resource.js',
+                            'lib/angular-aria/angular-aria.js',
                             'lib/angular-translate/angular-translate.js',
                             'lib/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
                             'lib/angular-translate-storage-local/angular-translate-storage-local.js',

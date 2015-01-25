@@ -15,12 +15,12 @@
                         <tbody>
                         <tr>
                             <td>Life</td>
-                            <td class="bottom_helper_block"><span class="life-counter bottom">20</span></td>
+                            <td class="bottom_helper_block"><span class="life-counter bottom">{{my.hitpoints}}</span></td>
                             <td class="top_helper_block"><span class="life-counter top">20</span></td>
                         </tr>
                         <tr>
                             <td>Infection</td>
-                            <td class="bottom_helper_block"><span class="infection-counter bottom">60</span></td>
+                            <td class="bottom_helper_block"><span class="infection-counter bottom">{{my.infection}}</span></td>
                             <td class="top_helper_block"><span class="infection-counter top">60</span></td>
                         </tr>
                         <tr>
@@ -54,14 +54,14 @@
             </div>
             <div class="modal-footer">
                 <div id="my-hitpoints" class="btn-group pull-left">
-                    <button class="btn-sm top lose update-hitpoints">-</button>
-                    <span class="btn btn-default btn-sm hitpoints-counter top">20</span>
-                    <button class="btn-sm top gain update-hitpoints">+</button>
+                    <button class="btn-sm" ng-click="changePoints('hitpoints','lose')">-</button>
+                    <span class="btn btn-default btn-sm">{{my.hitpoints}}</span>
+                    <button class="btn-sm" ng-click="changePoints('hitpoints','gain')">+</button>
                 </div>
                 <div id="my-infection" class="btn-group pull-left">
-                    <button class="btn-sm top lose update-infection">-</button>
-                    <span class="btn btn-default btn-sm infection-counter top">0</span>
-                    <button class="btn-sm top gain update-infection">+</button>
+                    <button class="btn-sm" ng-click="changePoints('infection','lose')">-</button>
+                    <span class="btn btn-default btn-sm">{{my.infection}}</span>
+                    <button class="btn-sm " ng-click="changePoints('infection','gain')">+</button>
                 </div>
                 <button data-dismiss="modal">Close</button>
             </div>

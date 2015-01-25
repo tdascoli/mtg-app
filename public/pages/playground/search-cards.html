@@ -1,0 +1,15 @@
+<div class="modal fade" id="search-cards" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="GameModalCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-footer">
+                <button data-dismiss="modal">Close</button>
+                <button class="btn-primary" ng-click="selectCardsModal()">Select Card(s)</button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <img ng-src="http://mtgimage.com/multiverseid/{{card}}.jpg" class="search-card" ng-repeat="card in searchCards() track by $index" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

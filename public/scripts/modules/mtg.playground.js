@@ -3,15 +3,15 @@
 
     var module = angular.module('mtg.playground', ['mtg.variables','ngLodash']);
 
-    module.controller('GameAreaCtrl', function ($compile, $scope, lodash, GameAreaService) {
+    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, lodash, GameAreaService) {
         var $game = $('#game-area');
         var $library = $('#my-library');
         var $hand = $('#my-hand');
         var side = 'my';
 
         var currentCard = 0;
-        $scope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
-        $scope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
+        $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
+        $rootScope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
 
         var card = {baseOffset: 40};
         /*if ($.browser.mobile) {
@@ -23,7 +23,9 @@
                                             '<img src="/images/card-back.jpeg" class="back-side"/>' +
                                         '</div>');
 
-        $scope.my = {
+        $rootScope.my = {
+            hitpoints: 20,
+            infection: 0,
             cards: [
                 370490,
                 370490,
@@ -87,8 +89,8 @@
                 5863
             ]
         };
-        $scope.op = {};
-        $scope.dragCardOptions = {containment: '#game-area' ,grid: [10, 10], snap: '.exile,.graveyard,.library,.hand,.battlefield',snapTolerance: 10}; //
+        $rootScope.op = { hitpoints: 20 };
+        $scope.dragCardOptions = {containment: '#game-area' ,grid: [10, 10], snap: '.exile,.graveyard,.library,.hand,.battlefield',snapTolerance: 10};
 
         $scope.toBattlefield = function (event, ui) {
             console.log('toBattlefield');
@@ -125,7 +127,10 @@
             $scope.reorganize();
         };
 
-        $scope.shuffleLibrary = function () {
+        $scope.shuffleLibrary = function (sidebar) {
+            if (sidebar){
+                GameAreaService.closeSidebar();
+            }
             if ($scope.my.library === undefined) {
                 $scope.my = {library: $scope.my.cards};
             }
@@ -144,6 +149,11 @@
             }
         };
 
+        $scope.searchCards=function(which){
+            GameAreaService.closeSidebar();
+            GameAreaService.searchCards(which);
+        };
+
         $scope.isTapped = function (id, side) {
             if ($('#' + side + '_' + id).hasClass('in-battlefield')) {
                 if ($('#' + side + '_' + id).hasClass('tapped')) {
@@ -155,6 +165,7 @@
         };
 
         $scope.untapAll = function () {
+            GameAreaService.closeSidebar();
             $('.my.tapped').toggleClass('tapped');
         };
 
@@ -180,7 +191,7 @@
 
         $scope.drawCard = function () {
             if (currentCard === 0) {
-                $scope.shuffleLibrary();
+                $scope.shuffleLibrary(false);
             }
 
             // Appending to DOM
@@ -235,6 +246,26 @@
                 }, 'fast');
             });
         };
+
+        $scope.changePoints=function(what,points){
+            if (what==='hitpoints'){
+                if (points==='lose'){
+                    $scope.my.hitpoints--;
+                }
+                else if (points==='gain'){
+                    $scope.my.hitpoints++;
+                }
+                $('#my-battlefield').attr('data-hitpoints',$scope.my.hitpoints);
+            }
+            else {
+                if (points==='lose'){
+                    $scope.my.infection--;
+                }
+                else if (points==='gain'){
+                    $scope.my.infection++;
+                }
+            }
+        };
     });
 
     module.factory('GameAreaService', ['zIndex', function (zIndex) {
@@ -288,13 +319,29 @@
                 $card.css('z-index', ++zIndex);
         }
 
+        function searchCards(which) {
+            $('#search-cards').attr('cards', which);
+            $('#search-cards').modal();
+        }
+
+        function closeSidebar(){
+            $('#playgroundnav').collapse('hide');
+        }
+
+        function myLibrary(){
+            return $scope.my.library;
+        }
+
         return {
             'cardContextMobile': cardContextMobile,
             'cardIn': cardIn,
             'placeIn': placeIn,
             'tap': tap,
             'shuffleArray': shuffleArray,
-            'updateZ':updateZ
+            'updateZ':updateZ,
+            'closeSidebar':closeSidebar,
+            'searchCards':searchCards,
+            'myLibrary':myLibrary
         };
     }]);
 

@@ -35,6 +35,7 @@
     "angular-dragdrop":"latest",
     "angular-touch":"latest",
     "angular-socket-io":"latest",
+    "angular-aria":"latest",
     "ng-lodash":"latest",
     "restangular": "~1.4.0",
     "jquery": "2.1.1",
