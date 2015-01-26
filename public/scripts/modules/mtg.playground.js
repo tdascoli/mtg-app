@@ -136,7 +136,7 @@
 
         $scope.cardAction = function (id, side, multiverseid) {
             if ($.browser.mobile) {
-                console.log('mobile');
+                console.log('mobile',id, side, multiverseid);
                 GameAreaService.cardContextMobile(id, side, multiverseid);
             }
             else {
@@ -339,6 +339,7 @@
         }
 
         function getNewCardElement(multiverseid,side){
+            currentCard++;
             // Appending to DOM
             var $card = dummyCard.clone();
             $card.attr('id', side + '_' + currentCard).attr('ng-click', 'cardAction(' + currentCard + ',\'' + side + '\','+multiverseid+')');
