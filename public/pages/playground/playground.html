@@ -10,8 +10,8 @@
             <li><a class="playgroundnav" ng-click="untapAll()">Untap all</a></li>
             <li><hr /></li>
             <li><button class="playgroundnav" ng-click="searchCards('library')" ng-disabled="!my.library.length">Search library</button></li>
-            <li><button class="playgroundnav" ng-click="searchCards('graveyard')" ng-disabled="!countCards('graveyard')">Search graveyard</button></li>
-            <li><button class="playgroundnav" ng-click="searchCards('exile')" ng-disabled="!countCards('exile')">Search exiled cards</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('graveyard')" ng-disabled="!countCards('my','graveyard')">Search graveyard</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('exile')" ng-disabled="!countCards('my','exile')">Search exiled cards</button></li>
         </ul>
     </div>
 </div>

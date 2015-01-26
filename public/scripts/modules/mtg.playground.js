@@ -85,7 +85,7 @@
                 5863
             ]
         };
-        $rootScope.op = { hitpoints: 20 };
+        $rootScope.op = { hitpoints: 20, infection: 0 };
 
         $scope.dragCardOptions = {containment: '#game-area' ,grid: [10, 10], snap: '.exile,.graveyard,.library,.hand,.battlefield',snapTolerance: 10};
 
@@ -266,8 +266,8 @@
             }
         };
 
-        $scope.countCards=function(which){
-            return $('.my.card-min.in-'+which+' img.front-side').length;
+        $scope.countCards=function(side,which){
+            return $('.'+side+'.card-min.in-'+which).length;
         };
     });
 
