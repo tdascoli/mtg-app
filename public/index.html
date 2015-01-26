@@ -44,7 +44,9 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <mtg-chat-button></mtg-chat-button>
+                    <button type="button" class="navbar-toggle navbar-btn navbar-playground" ng-class="{'has-comment':countMessage>0}" data-toggle="modal" data-target="#chat-widget" glyph-icon="comment">
+                        <span ng-show="countMessage>0" class="badge badge-notify">{{countMessage}}</span>
+                    </button>
                     <button type="button" class="navbar-toggle navbar-btn navbar-playground" data-toggle="modal" data-target="#player-stats">
                         <span glyph-icon="stats"></span>
                     </button>

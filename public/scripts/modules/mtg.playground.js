@@ -90,6 +90,7 @@
             ]
         };
         $rootScope.op = { hitpoints: 20 };
+
         $scope.dragCardOptions = {containment: '#game-area' ,grid: [10, 10], snap: '.exile,.graveyard,.library,.hand,.battlefield',snapTolerance: 10};
 
         $scope.toBattlefield = function (event, ui) {

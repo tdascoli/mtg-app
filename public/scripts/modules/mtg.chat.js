@@ -3,7 +3,7 @@
 
     var module = angular.module('mtg.chat', ['mtg.socket','mtg.variables']);
 
-    module.controller('ChatCtrl', ['$scope','socket','countMessage', function ($scope, socket, countMessage) {
+    module.controller('ChatCtrl', ['$scope','$rootScope','socket','countMessage', function ($scope, $rootScope, socket) {
 
         // Socket listeners
         // ================
@@ -15,8 +15,8 @@
 
         socket.on('send:message', function (message) {
             $scope.messages.push(message);
-            countMessage++;
-            $('#messages').attr('data-messages',countMessage);
+            $rootScope.countMessage++;
+            $('#messages').attr('data-messages',$rootScope.countMessage);
         });
 
         socket.on('change:name', function (data) {
@@ -102,8 +102,8 @@
         };
 
         $scope.dismissMessage=function(){
-            countMessage=0;
-            $('#messages').attr('data-messages',countMessage);
+            $rootScope.countMessage=0;
+            $('#messages').attr('data-messages',$rootScope.countMessage);
         };
 
         socket.on('send:name', function (data) {
@@ -111,15 +111,15 @@
         });
 
         $scope.hasMessage=function(){
-            $scope.$watch(countMessage, function(){
-                if ($('#messages').attr('data-messages',countMessage)>0){
+            $scope.$watch($rootScope.countMessage, function(){
+                if ($rootScope.countMessage>0){
                     return true;
                 }
                 return false;
             });
         };
         $scope.getCountMessage=function(){
-            return countMessage;
+            return $rootScope.countMessage;
         };
 
     }]);
