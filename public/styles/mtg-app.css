@@ -69,7 +69,7 @@ span.mtg {
 }
 .phase {
   height: 25px;
-  background-color: #000099;
+  background-color: #4679bd;
   color: #fff;
   font-size: 0.809em;
   line-height: 25px;
@@ -151,6 +151,7 @@ span.mtg {
   top: 51px;
   left: 0;
   height: 100% !important;
+  font-size: 1em;
   width: 66.66666667%;
   z-index: 9000;
 }
@@ -166,12 +167,32 @@ span.mtg {
 }
 .search-card {
   width: 30%;
+  height: auto;
   margin-right: 3%;
   margin-bottom: 3%;
-  height: auto;
 }
 .search-card:nth-of-type(3) {
   margin-right: 0;
+}
+button.playgroundnav {
+  font-size: 1em;
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  padding: 10px 15px;
+  margin: 0;
+  -webkit-box-shadow: 0 0 0 0 transparent !important;
+  -moz-box-shadow: 0 0 0 0 transparent !important;
+  box-shadow: 0 0 0 0 transparent !important;
+}
+#search-cards input.search-library {
+  width: 5em;
+  display: inline;
+}
+#search-cards img.selected {
+  border: 2px solid #4679bd;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 .card-min {
   width: 40px;
@@ -241,4 +262,25 @@ span.mtg {
   -o-transform: translateZ(0px);
   -ms-transform: translateZ(0px);
   transform: translateZ(0px);
+}
+.has-token:after {
+  content: attr(data-token);
+  position: absolute;
+  font-weight: bold;
+  color: #fff;
+  right: -1px;
+  bottom: -1px;
+  width: 40%;
+  height: 0;
+  padding-bottom: 40%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: #4679bd;
+  font-size: 0.809em;
+  text-align: center;
+  line-height: 1.2;
+}
+.op.has-token:after {
+  background: #8b0000;
 }

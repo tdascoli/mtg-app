@@ -6,8 +6,13 @@ $(document).on('click','.navbar-collapse.in',function(e) {
     }
 });
 
+$(document).on('click','.sidebar.collapse.in',function(e) {
+    if( $(e.target).is('a') ) {
+        $(this).collapse('hide');
+    }
+});
+
 $('a.playgroundnav').click(function(){
-    alert('playgroundnav');
     $('#playgroundnav').collapse('hide');
 });
 

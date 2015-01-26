@@ -7,9 +7,14 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button data-dismiss="modal">Close</button>
-                <button class="btn-primary" ng-click="tapModal()" ng-show="showTappedModal(false)"><img class="tap" src="http://mtgimage.com/symbol/other/t.svg" />&nbsp;Tap Card</button>
-                <button class="btn-primary" ng-click="tapModal()" ng-show="showTappedModal(true)"><img class="tap" src="http://mtgimage.com/symbol/other/q.svg" />&nbsp;Untap Card</button>
+                <div id="card-tokens" class="btn-group pull-left" ng-show="showTokenModal()">
+                    <button class="btn-sm" ng-click="changeToken('lose')">-</button>
+                    <span class="btn btn-default btn-sm">{{showTokens()}}</span>
+                    <button class="btn-sm" ng-click="changeToken('gain')">+</button>
+                </div>
+                <button class=" btn-sm" data-dismiss="modal">Close</button>
+                <button class="btn-primary btn-sm" ng-click="tapModal()" ng-show="showTappedModal(false)"><img class="tap" src="http://mtgimage.com/symbol/other/t.svg" />&nbsp;Tap Card</button>
+                <button class="btn-primary btn-sm" ng-click="tapModal()" ng-show="showTappedModal(true)"><img class="tap" src="http://mtgimage.com/symbol/other/q.svg" />&nbsp;Untap Card</button>
             </div>
         </div>
     </div>

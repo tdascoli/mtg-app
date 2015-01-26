@@ -66,3 +66,25 @@
   -ms-transform: translateZ(0px);
   transform: translateZ(0px);
 }
+
+.has-token:after {
+  content: attr(data-token);
+  position: absolute;
+  font-weight: bold;
+  color: #fff;
+  right: -1px;
+  bottom: -1px;
+  width: 40%;
+  height: 0;
+  padding-bottom: 40%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: @mtg-blue;
+  font-size: 0.809em;
+  text-align: center;
+  line-height: 1.2;
+}
+.op.has-token:after {
+  background: @mtg-red;
+}

@@ -2,12 +2,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-footer">
-                <button data-dismiss="modal">Close</button>
-                <button class="btn-primary" ng-click="selectCardsModal()">Select Card(s)</button>
+                <button ng-click="closeSearchCardModal()">Close</button>
+                <button class="btn-primary" ng-click="selectCardModal()" ng-show="showCards || !isLibrary()">Select Card(s)</button>
+                <input type="number" class="form-control search-library" placeholder="Cards" ng-model="amountCards" ng-hide="showCards || !isLibrary()" />
+                <button class="btn-primary" ng-click="showCardsModal()" ng-hide="showCards || !isLibrary()">Show <span ng-hide="amountCards>0">all</span></button>
             </div>
             <div class="modal-body">
-                <div>
-                    <img ng-src="http://mtgimage.com/multiverseid/{{card}}.jpg" class="search-card" ng-repeat="card in searchCards() track by $index" />
+                <div ng-show="isLibrary()">
+                    <img ng-src="http://mtgimage.com/multiverseid/{{card}}.jpg" id="card_{{$index}}" class="search-card" ng-click="selectCard($index,card)" ng-repeat="card in searchCards() | limitTo : amountCards track by $index "  />
+                </div>
+                <div ng-hide="isLibrary()">
+                    <img ng-src="http://mtgimage.com/multiverseid/{{card}}.jpg" id="card_{{$index}}" class="search-card" ng-click="selectCard($index,card)"  ng-repeat="card in searchCards() track by $index " />
                 </div>
             </div>
         </div>

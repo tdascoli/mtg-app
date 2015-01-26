@@ -4,12 +4,14 @@
     </div>
     <div class="nav navbar-nav playground">
         <ul class="nav navbar-default">
-            <li><a class="playgroundnav" ng-click="shuffleLibrary()">Shuffe Library</a></li>
-            <li><a class="playgroundnav" ng-click="untapAll()">Untap All</a></li>
+            <li><a class="playgroundnav" ng-click="shuffleLibrary(true)">Shuffe library</a></li>
+            <li><a class="playgroundnav" ng-click="drawFullHand()">Draw full hand</a></li>
+            <li><a class="playgroundnav" ng-click="shuffleLibrary()">Reveal hand</a></li>
+            <li><a class="playgroundnav" ng-click="untapAll()">Untap all</a></li>
             <li><hr /></li>
-            <li><button class="playgroundnav" ng-click="searchCards('library')" ng-disabled="!my.library.length">Search Library</button></li>
-            <li><button class="playgroundnav" ng-click="searchCards('graveyard')" ng-disabled="!my.library.length">Search Graveyard</button></li>
-            <li><button class="playgroundnav" ng-click="searchCards('exile')" ng-disabled="!my.library.length">Search Exiled Cards</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('library')" ng-disabled="!my.library.length">Search library</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('graveyard')" ng-disabled="!countCards('graveyard')">Search graveyard</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('exile')" ng-disabled="!countCards('exile')">Search exiled cards</button></li>
         </ul>
     </div>
 </div>
@@ -29,7 +31,7 @@
         <div id="my-handlogic" class="handlogic">
             <div id="my-exile" class="exile" jqyoui-droppable="{onDrop:'toExile'}" data-drop="true">ex</div>
             <div id="my-graveyard" class="graveyard" jqyoui-droppable="{onDrop:'toGraveyard'}" data-drop="true">gr</div>
-            <div id="my-library" class="library" jqyoui-droppable="{onDrop:'toLibrary'}" data-drop="true" ng-click="drawCard()">
+            <div id="my-library" class="library" jqyoui-droppable="{onDrop:'toLibrary'}" data-drop="true" ng-click="drawCard(false,'my')">
                 <div class="my card-min card-dummy">
                     <img src="/images/card-back.jpeg" />
                 </div>

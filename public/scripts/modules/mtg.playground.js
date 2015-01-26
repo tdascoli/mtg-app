@@ -3,13 +3,12 @@
 
     var module = angular.module('mtg.playground', ['mtg.variables','ngLodash']);
 
-    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, lodash, GameAreaService) {
+    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, lodash, currentCard, GameAreaService) {
         var $game = $('#game-area');
         var $library = $('#my-library');
         var $hand = $('#my-hand');
         var side = 'my';
 
-        var currentCard = 0;
         $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
         $rootScope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
 
@@ -19,9 +18,6 @@
          }*/
         var offset = card.baseOffset;
         var top = (side === 'op') ? 0 : $library.offset().top;
-        var dummyCard = angular.element('<div class="card-min" data-drag="true" jqyoui-draggable data-jqyoui-options="{{dragCardOptions}}">' +
-                                            '<img src="/images/card-back.jpeg" class="back-side"/>' +
-                                        '</div>');
 
         $rootScope.my = {
             hitpoints: 20,
@@ -132,10 +128,10 @@
             if (sidebar){
                 GameAreaService.closeSidebar();
             }
-            if ($scope.my.library === undefined) {
-                $scope.my = {library: $scope.my.cards};
+            if ($rootScope.my.library === undefined) {
+                $rootScope.my.library=$rootScope.my.cards;
             }
-            GameAreaService.shuffleArray($scope.my.library);
+            GameAreaService.shuffleArray($rootScope.my.library);
         };
 
         $scope.cardAction = function (id, side, multiverseid) {
@@ -156,8 +152,8 @@
         };
 
         $scope.isTapped = function (id, side) {
-            if ($('#' + side + '_' + id).hasClass('in-battlefield')) {
-                if ($('#' + side + '_' + id).hasClass('tapped')) {
+            if (GameAreaService.getCardElement(id,side).hasClass('in-battlefield')) {
+                if (GameAreaService.getCardElement(id,side).hasClass('tapped')) {
                     return true;
                 }
                 return false;
@@ -190,23 +186,26 @@
             });
         };
 
-        $scope.drawCard = function () {
+        $scope.drawFullHand=function(){
+            for(var i=0;i<7;i++){
+                $scope.drawCard(false,'my');
+            }
+        };
+
+        $scope.drawCard = function (multiverseid,side) {
             if (currentCard === 0) {
                 $scope.shuffleLibrary(false);
             }
 
-            // Appending to DOM
-            var $card = dummyCard.clone();
-
-            var multiverseid = $scope.my.library[0];
-            $scope.my.library.splice(0, 1);
+            if (!multiverseid) {
+                multiverseid = $rootScope.my.library[0];
+                $rootScope.my.library.splice(0, 1);
+            }
             currentCard++;
-            $card.attr('id', side + '_' + currentCard).attr('ng-click', 'cardAction(' + currentCard + ',\'' + side + '\','+multiverseid+')');
-            $card.append(angular.element('<img src="http://mtgimage.com/multiverseid/' + multiverseid + '.jpg" multiverseid="' + multiverseid + '" class="front-side" />'));
-            $card.addClass('my').addClass('in-hand');
+            var $card=GameAreaService.getNewCardElement(multiverseid,side);
+            $card.addClass(side).addClass('in-hand');
 
             $compile($card)($scope);
-
             $game.append($card);
 
             // Position
@@ -220,7 +219,6 @@
         };
 
         $scope.reorganize = function () {
-            console.log('reorganize');
             var $cards = $('.card-min.in-hand');
             // Position
             var width = $hand.width() - offset,
@@ -251,25 +249,32 @@
         $scope.changePoints=function(what,points){
             if (what==='hitpoints'){
                 if (points==='lose'){
-                    $scope.my.hitpoints--;
+                    $rootScope.my.hitpoints--;
                 }
                 else if (points==='gain'){
-                    $scope.my.hitpoints++;
+                    $rootScope.my.hitpoints++;
                 }
-                $('#my-battlefield').attr('data-hitpoints',$scope.my.hitpoints);
+                $('#my-battlefield').attr('data-hitpoints',$rootScope.my.hitpoints);
             }
             else {
                 if (points==='lose'){
-                    $scope.my.infection--;
+                    $rootScope.my.infection--;
                 }
                 else if (points==='gain'){
-                    $scope.my.infection++;
+                    $rootScope.my.infection++;
                 }
             }
         };
+
+        $scope.countCards=function(which){
+            return $('.my.card-min.in-'+which+' img.front-side').length;
+        };
     });
 
-    module.factory('GameAreaService', ['zIndex', function (zIndex) {
+    module.factory('GameAreaService', ['zIndex','currentCard', function (zIndex,currentCard) {
+        var dummyCard = angular.element('<div class="card-min" data-drag="true" jqyoui-draggable data-jqyoui-options="{{dragCardOptions}}">' +
+                                            '<img src="/images/card-back.jpeg" class="back-side"/>' +
+                                        '</div>');
 
         function cardContextMobile(id,side,multiverseid) {
             $('#card-widget-mobile').attr('card', id);
@@ -329,8 +334,16 @@
             $('#playgroundnav').collapse('hide');
         }
 
-        function myLibrary(){
-            return $scope.my.library;
+        function getCardElement(id,side){
+            return $('#'+side+'_'+id);
+        }
+
+        function getNewCardElement(multiverseid,side){
+            // Appending to DOM
+            var $card = dummyCard.clone();
+            $card.attr('id', side + '_' + currentCard).attr('ng-click', 'cardAction(' + currentCard + ',\'' + side + '\','+multiverseid+')');
+            $card.append(angular.element('<img src="http://mtgimage.com/multiverseid/' + multiverseid + '.jpg" multiverseid="' + multiverseid + '" class="front-side" />'));
+            return $card;
         }
 
         return {
@@ -342,7 +355,8 @@
             'updateZ':updateZ,
             'closeSidebar':closeSidebar,
             'searchCards':searchCards,
-            'myLibrary':myLibrary
+            'getCardElement':getCardElement,
+            'getNewCardElement':getNewCardElement
         };
     }]);
 
