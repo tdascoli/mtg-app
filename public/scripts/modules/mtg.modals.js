@@ -88,7 +88,7 @@
             }
             else {
                 var cards=[];
-                $('.my.card-min.in-'+$('#search-cards').attr('cards')+' img.front-side').each(function(){
+                $('.'+$('#search-cards').attr('side')+'.card-min.in-'+$('#search-cards').attr('cards')).each(function(){
                     cards.push($(this).attr('multiverseid'));
                 });
                 return cards;
@@ -107,7 +107,14 @@
         };
 
         $scope.isLibrary=function(){
-            if ($('#search-cards').attr('cards')==='library'){
+            if ($('#search-cards').attr('cards') === 'library') {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.isOpponent=function(){
+            if ($('#search-cards').attr('side') === 'op') {
                 return true;
             }
             return false;

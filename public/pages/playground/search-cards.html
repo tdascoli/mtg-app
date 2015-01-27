@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-footer">
                 <button ng-click="closeSearchCardModal()">Close</button>
-                <button class="btn-primary" ng-click="selectCardModal()" ng-show="showCards || !isLibrary()">Select Card(s)</button>
+                <button class="btn-primary" ng-click="selectCardModal()" ng-show="!isOpponent() && (showCards || !isLibrary())">Select Card(s)</button>
                 <input type="number" class="form-control search-library" placeholder="Cards" ng-model="amountCards" ng-hide="showCards || !isLibrary()" />
                 <button class="btn-primary" ng-click="showCardsModal()" ng-hide="showCards || !isLibrary()">Show <span ng-hide="amountCards>0">all</span></button>
             </div>

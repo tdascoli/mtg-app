@@ -1,12 +1,14 @@
 ;(function () {
     'use strict';
 
-    var module = angular.module('mtg.playground', ['mtg.variables','ngLodash']);
+    var module = angular.module('mtg.playground', ['mtg.variables','mtg.socket','ngLodash']);
 
-    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, lodash, currentCard, GameAreaService) {
+    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, socket, lodash, currentCard, GameAreaService) {
         var $game = $('#game-area');
-        var $library = $('#my-library');
-        var $hand = $('#my-hand');
+        var $library = {my:$('#my-library'),op:$('#op-library')};
+        var $hand = {my:$('#my-hand'),op:$('#op-hand')};
+        var $graveyard = {my:$('#my-graveyard'),op:$('#op-graveyard')};
+        var $exile = {my:$('#my-exile'),op:$('#op-exile')};
         var side = 'my';
 
         $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
@@ -17,7 +19,6 @@
          card.baseOffset = 38; // mobile card width
          }*/
         var offset = card.baseOffset;
-        var top = (side === 'op') ? 0 : $library.offset().top;
 
         $rootScope.my = {
             hitpoints: 20,
@@ -85,43 +86,110 @@
                 5863
             ]
         };
-        $rootScope.op = { hitpoints: 20, infection: 0 };
+        $rootScope.op = { hitpoints: 20, infection: 0,
+            library: [
+            370490,
+            370490,
+            370490,
+            370490,
+            380194,
+            380194,
+            380194,
+            380194,
+            202429,
+            376453,
+            376453,
+            376453,
+            202433,
+            202433,
+            202433,
+            202424,
+            202424,
+            202424,
+            202424,
+            202442,
+            202442,
+            600,
+            83058,
+            83058,
+            275705,
+            159307,
+            629,
+            630,
+            631,
+            632,
+            633,
+            376508,
+            159308,
+            159308,
+            692,
+            202437,
+            202437,
+            201156,
+            201156,
+            201156,
+            201156,
+            202447,
+            202447,
+            201162,
+            201162,
+            201162,
+            201162,
+            373334,
+            373334,
+            373334,
+            373334,
+            202628,
+            159828,
+            202409,
+            729,
+            728,
+            201161,
+            373408,
+            5863,
+            5863
+        ] };
 
         $scope.dragCardOptions = {containment: '#game-area' ,grid: [10, 10], snap: '.exile,.graveyard,.library,.hand,.battlefield',snapTolerance: 10};
 
         $scope.toBattlefield = function (event, ui) {
             console.log('toBattlefield');
-            //$scope.my.battlefield=ui.draggable;
             GameAreaService.cardIn(ui.draggable, 'battlefield');
             //ui.draggable.addClass('flipped');
-            $scope.reorganize();
+            $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'battlefield');
+
+            $scope.reorganize(side);
         };
 
         $scope.toHand = function (event, ui) {
             console.log('toHand');
             GameAreaService.cardIn(ui.draggable, 'hand');
-            $scope.reorganize();
+            $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'hand');
+            $scope.reorganize(side);
         };
 
         $scope.toGraveyard = function (event, ui) {
             console.log('toGraveyard');
             GameAreaService.cardIn(ui.draggable, 'graveyard');
             GameAreaService.placeIn(ui.draggable, $('#my-graveyard').offset());
-            $scope.reorganize();
+            $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'graveyard');
+            $scope.reorganize(side);
         };
 
         $scope.toExile = function (event, ui) {
             console.log('toExile');
             GameAreaService.cardIn(ui.draggable, 'exile');
             GameAreaService.placeIn(ui.draggable, $('#my-exile').offset());
-            $scope.reorganize();
+            $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'exile');
+            $scope.reorganize(side);
         };
 
         $scope.toLibrary = function (event, ui) {
             console.log('toLibrary');
             GameAreaService.cardIn(ui.draggable, 'library');
             GameAreaService.placeIn(ui.draggable, $('#my-library').offset());
-            $scope.reorganize();
+            $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'library');
+            $scope.reorganize(side);
         };
 
         $scope.shuffleLibrary = function (sidebar) {
@@ -146,9 +214,11 @@
             }
         };
 
-        $scope.searchCards=function(which){
-            GameAreaService.closeSidebar();
-            GameAreaService.searchCards(which);
+        $scope.searchCards=function(side,which){
+            if (side==='my'){
+                GameAreaService.closeSidebar();
+            }
+            GameAreaService.searchCards(side,which);
         };
 
         $scope.isTapped = function (id, side) {
@@ -202,27 +272,31 @@
                 $rootScope.my.library.splice(0, 1);
             }
             currentCard++;
-            var $card=GameAreaService.getNewCardElement(multiverseid,side);
-            $card.addClass(side).addClass('in-hand');
+
+            var $card=GameAreaService.drawCard(multiverseid,side,currentCard);
 
             $compile($card)($scope);
             $game.append($card);
 
-            // Position
-            $card.css({
-                left: $library.offset().left,
-                top: top
-            });
+            $scope.sendDrawCard($card);
 
             // Reorganizing
-            $scope.reorganize();
+            $scope.reorganize(side);
         };
 
-        $scope.reorganize = function () {
-            var $cards = $('.card-min.in-hand');
+        $scope.dragCard=function(){
+
+        };
+
+        $scope.reorganize = function (side) {
+            var hand = $hand.my;
+            if (side==='op'){
+                hand = $hand.op;
+            }
+            var $cards = $('.'+side+'.card-min.in-hand');
             // Position
-            var width = $hand.width() - offset,
-                left = $hand.offset().left;
+            var width = hand.width() - offset,
+                left = hand.offset().left;
 
             // Is there place in the hand?
             var diff = Math.floor(width / $cards.length);
@@ -241,7 +315,7 @@
                 // Animating
                 $(this).animate({
                     left: to_position,
-                    top: top
+                    top: GameAreaService.handTop(side)
                 }, 'fast');
             });
         };
@@ -269,12 +343,83 @@
         $scope.countCards=function(side,which){
             return $('.'+side+'.card-min.in-'+which).length;
         };
+
+        // Socket listeners
+        // ================
+
+        socket.on('playground:drag', function (data) {
+            console.log('playground:drag',data,data.offset);
+
+            if (data.offset.where!=='battlefield'){
+                GameAreaService.cardIn($('#op_'+data.offset.id), data.offset.where);
+                var offset=$graveyard.op;
+                if (data.offset.where==='hand'){
+                    offset=$hand.op;
+                }
+                if (data.offset.where==='exile'){
+                    offset=$exile.op;
+                }
+                GameAreaService.placeIn($('#op_'+data.offset.id),offset.offset());
+            }
+            else {
+                GameAreaService.cardIn($('#op_'+data.offset.id), data.offset.where);
+                $('#op_'+data.offset.id).css({
+                    zIndex: data.offset.zIndex,
+                    left: data.offset.left,
+                    top: (data.offset.top/2)
+                }).addClass('flipped');
+            }
+            $scope.reorganize('op');
+        });
+
+        socket.on('playground:action', function (data) {
+            console.log('playground:action',data,data.appendix);
+
+            if (data.action==='draw') {
+                var $card = GameAreaService.drawCard(data.appendix.multiverseid, 'op', data.appendix.id);
+                $compile($card)($scope);
+                $game.append($card);
+                $scope.reorganize('op');
+            }
+        });
+
+        // Methods published to the scope
+        // ==============================
+        $scope.sendDragCard=function($card,offset,position,where){
+            var pos = {
+                left: offset.left,
+                top: offset.top,
+                posLeft: position.left,
+                posTop: position.top,
+                //fluidLeft: playground.helpers.getFluidLeft(ui.position.left),
+                //fluidTop: playground.helpers.getFluidTop(ui.position.top),
+                zIndex: $card.css('z-index'),
+                id: $card.attr('number'),
+                where: where
+            };
+
+            socket.emit('playground:drag', { offset: pos });
+        };
+        $scope.sendDrawCard=function($card){
+            var appendix = {
+                multiverseid: $card.attr('multiverseid'),
+                id: $card.attr('number')
+            };
+            socket.emit('playground:action', { action: 'draw', appendix: appendix });
+        };
     });
 
-    module.factory('GameAreaService', ['zIndex','currentCard', function (zIndex,currentCard) {
-        var dummyCard = angular.element('<div class="card-min" data-drag="true" jqyoui-draggable data-jqyoui-options="{{dragCardOptions}}">' +
+    module.factory('GameAreaService', ['zIndex', function (zIndex) {
+
+        var myDummyCard = angular.element('<div class="card-min" data-drag="true" jqyoui-draggable data-jqyoui-options="{{dragCardOptions}}">' +
                                             '<img src="/images/card-back.jpeg" class="back-side"/>' +
-                                        '</div>');
+                                          '</div>');
+        var opDummyCard = angular.element('<div class="card-min">' +
+                                            '<img src="/images/card-back.jpeg" class="back-side"/>' +
+                                          '</div>');
+
+        var library = {my:$('#my-library'),op:$('#op-library')};
+        var hand = {my:$('#my-hand'),op:$('#op-hand')};
 
         function cardContextMobile(id,side,multiverseid) {
             $('#card-widget-mobile').attr('card', id);
@@ -292,6 +437,7 @@
         }
 
         function placeIn($card, offset) {
+            console.log($card,offset);
             $card.animate({
                 left: offset.left,
                 top: offset.top
@@ -325,7 +471,8 @@
                 $card.css('z-index', ++zIndex);
         }
 
-        function searchCards(which) {
+        function searchCards(side,which) {
+            $('#search-cards').attr('side', side);
             $('#search-cards').attr('cards', which);
             $('#search-cards').modal();
         }
@@ -338,13 +485,37 @@
             return $('#'+side+'_'+id);
         }
 
-        function getNewCardElement(multiverseid,side){
-            currentCard++;
+        function getNewCardElement(multiverseid,side,currentCard){
             // Appending to DOM
-            var $card = dummyCard.clone();
+            var $card = myDummyCard.clone();
+            if (side==='op'){
+                $card = opDummyCard.clone();
+            }
             $card.attr('id', side + '_' + currentCard).attr('ng-click', 'cardAction(' + currentCard + ',\'' + side + '\','+multiverseid+')');
-            $card.append(angular.element('<img src="http://mtgimage.com/multiverseid/' + multiverseid + '.jpg" multiverseid="' + multiverseid + '" class="front-side" />'));
+            $card.attr('number',currentCard);
+            $card.attr('multiverseid',multiverseid);
+            $card.append(angular.element('<img src="http://mtgimage.com/multiverseid/' + multiverseid + '.jpg" class="front-side" />'));
             return $card;
+        }
+
+        function drawCard(multiverseid,side,currentCard) {
+            var offset = library.my.offset();
+            if (side==='op'){
+                offset = library.op.offset();
+            }
+            var $card=getNewCardElement(multiverseid,side,currentCard);
+            $card.addClass(side).addClass('in-hand');
+            // Position
+
+            $card.css({
+                left: offset.left,
+                top: offset.top
+            });
+            return $card;
+        }
+
+        function handTop(side){
+            var top = (side === 'op') ? 0 : library.my.offset().top;
         }
 
         return {
@@ -357,7 +528,9 @@
             'closeSidebar':closeSidebar,
             'searchCards':searchCards,
             'getCardElement':getCardElement,
-            'getNewCardElement':getNewCardElement
+            'getNewCardElement':getNewCardElement,
+            'drawCard':drawCard,
+            'handTop':handTop
         };
     }]);
 

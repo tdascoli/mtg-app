@@ -9,14 +9,24 @@
             <li><a class="playgroundnav" ng-click="shuffleLibrary()">Reveal hand</a></li>
             <li><a class="playgroundnav" ng-click="untapAll()">Untap all</a></li>
             <li><hr /></li>
-            <li><button class="playgroundnav" ng-click="searchCards('library')" ng-disabled="!my.library.length">Search library</button></li>
-            <li><button class="playgroundnav" ng-click="searchCards('graveyard')" ng-disabled="!countCards('my','graveyard')">Search graveyard</button></li>
-            <li><button class="playgroundnav" ng-click="searchCards('exile')" ng-disabled="!countCards('my','exile')">Search exiled cards</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('my','library')" ng-disabled="!my.library.length">Search library</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('my','graveyard')" ng-disabled="!countCards('my','graveyard')">Search graveyard</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('my','exile')" ng-disabled="!countCards('my','exile')">Search exiled cards</button></li>
         </ul>
     </div>
 </div>
 <div mtg-playground id="game-area" class="content game-area" ng-swipe-left="nextPhase()">
     <div id="op-game-area">
+        <div id="op-handlogic" class="handlogic">
+            <div id="op-exile" class="exile" ng-click="searchCards('op','exile')">ex</div>
+            <div id="op-graveyard" class="graveyard" ng-click="searchCards('op','graveyard')">gr</div>
+            <div id="op-library" class="library">
+                <div class="op card-min card-dummy" ng-show="op.library">
+                    <img src="/images/card-back.jpeg" />
+                </div>
+            </div>
+            <div id="op-hand" class="hand"></div>
+        </div>
         <div data-hitpoints="{{op.hitpoints}}" id="op-battlefield" class="battlefield"></div>
     </div>
     <div id="phase" class="phase">

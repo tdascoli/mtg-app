@@ -51,6 +51,54 @@ var userNames = (function () {
   };
 }());
 
+var games = (function () {
+  var games = {};
+
+  var claim = function (name) {
+    if (!name || games[name]) {
+      return false;
+    } else {
+      games[name] = true;
+      return true;
+    }
+  };
+
+  // find the lowest unused "guest" name and claim it
+  var getGameName = function () {
+    var name,
+        nextId = 1;
+
+    do {
+      name = 'Game ' + nextId;
+      nextId += 1;
+    } while (!claim(name));
+
+    return name;
+  };
+
+  // serialize claimed names as an array
+  var get = function () {
+    var res = [];
+    for (game in games) {
+      res.push(game);
+    }
+
+    return res;
+  };
+
+  var free = function (name) {
+    if (games[name]) {
+      delete games[name];
+    }
+  };
+
+  return {
+    claim: claim,
+    free: free,
+    get: get,
+    getGameName: getGameName
+  };
+}());
 // export function for listening to the socket
 module.exports = function (socket) {
   var name = userNames.getGuestName();
@@ -58,7 +106,8 @@ module.exports = function (socket) {
   // send the new user their name and a list of users
   socket.emit('init', {
     name: name,
-    users: userNames.get()
+    users: userNames.get(),
+    games: games.get()
   });
 
   // notify other clients that a new user has joined
@@ -71,6 +120,21 @@ module.exports = function (socket) {
     socket.broadcast.emit('send:message', {
       user: name,
       text: data.message
+    });
+  });
+
+  // playground
+  socket.on('playground:drag', function (data) {
+    socket.broadcast.emit('playground:drag', {
+      user: name,
+      offset: data.offset
+    });
+  });
+  socket.on('playground:action', function (data) {
+    socket.broadcast.emit('playground:action', {
+      user: name,
+      action: data.action,
+      appendix: data.appendix
     });
   });
 

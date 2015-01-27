@@ -1,2 +1,7 @@
 <alert>Update available <button click="javascript:location.reload();">Update</button></alert>
 <h1>lobby</h1>
+<div class="well">
+    <ul>
+        <li ng-repeat="game in games"><a href="#/playground/{{$index}}">{{game}}</a></li>
+    </ul>
+</div>
