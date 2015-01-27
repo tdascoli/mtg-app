@@ -6,20 +6,28 @@
         <ul class="nav navbar-default">
             <li><a class="playgroundnav" ng-click="shuffleLibrary(true)">Shuffe library</a></li>
             <li><a class="playgroundnav" ng-click="drawFullHand()">Draw full hand</a></li>
-            <li><a class="playgroundnav" ng-click="shuffleLibrary()">Reveal hand</a></li>
+            <li>
+                <a class="playgroundnav" ng-click="sendRevealHand()">
+                    <span style="font-weight: normal;" ng-show="isHandConcealed">Reveal</span>
+                    <span style="font-weight: normal;" ng-hide="isHandConcealed">Conceal</span> hand
+                </a>
+            </li>
             <li><a class="playgroundnav" ng-click="untapAll()">Untap all</a></li>
             <li><hr /></li>
             <li><button class="playgroundnav" ng-click="searchCards('my','library')" ng-disabled="!my.library.length">Search library</button></li>
             <li><button class="playgroundnav" ng-click="searchCards('my','graveyard')" ng-disabled="!countCards('my','graveyard')">Search graveyard</button></li>
             <li><button class="playgroundnav" ng-click="searchCards('my','exile')" ng-disabled="!countCards('my','exile')">Search exiled cards</button></li>
+            <li><hr /></li>
+            <li><button class="playgroundnav" ng-click="searchCards('op','graveyard')" ng-disabled="!countCards('op','graveyard')">Opponents graveyard</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('op','exile')" ng-disabled="!countCards('op','exile')">Oppenents exiled cards</button></li>
         </ul>
     </div>
 </div>
 <div mtg-playground id="game-area" class="content game-area" ng-swipe-left="nextPhase()">
     <div id="op-game-area">
         <div id="op-handlogic" class="handlogic">
-            <div id="op-exile" class="exile" ng-click="searchCards('op','exile')">ex</div>
-            <div id="op-graveyard" class="graveyard" ng-click="searchCards('op','graveyard')">gr</div>
+            <div id="op-exile" class="exile">ex</div>
+            <div id="op-graveyard" class="graveyard">gr</div>
             <div id="op-library" class="library">
                 <div class="op card-min card-dummy" ng-show="op.library">
                     <img src="/images/card-back.jpeg" />

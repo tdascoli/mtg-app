@@ -259,18 +259,12 @@ button.playgroundnav {
 .op.card-min.in-hand .front-side {
   display: none;
 }
-/*
-.my.card-min .back-side,
-.op.card-min.in-hand .front-side,
-.op.card-min.in-battlefield .back-side,
-.in-library.card-min .front-side{
+.reveal-hand .op.card-min.in-hand .back-side {
   display: none;
 }
-.in-library.card-min .back-side
-.op.card-min.in-battlefield .front-side {
+.reveal-hand .op.card-min.in-hand .front-side {
   display: block;
 }
-*/
 .front-side.my,
 .back-side.my {
   -webkit-transform: translateZ(0px);

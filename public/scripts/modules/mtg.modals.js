@@ -12,6 +12,7 @@
 
         $scope.tapModal=function(){
             GameAreaService.tap($('#card-widget-mobile').attr('card'), $('#card-widget-mobile').attr('side'));
+            $scope.sendTapCard($('#card-widget-mobile').attr('card'));
             $('#card-context').modal('hide');
         };
 
@@ -53,12 +54,8 @@
             else if (points==='gain'){
                 token++;
             }
-            if (token>0) {
-                GameAreaService.getCardElement($('#card-widget-mobile').attr('card'),$('#card-widget-mobile').attr('side')).addClass('has-token').attr('data-token', token);
-            }
-            else {
-                GameAreaService.getCardElement($('#card-widget-mobile').attr('card'), $('#card-widget-mobile').attr('side')).removeClass('has-token').removeAttr('data-token');
-            }
+            GameAreaService.setToken($('#card-widget-mobile').attr('card'),$('#card-widget-mobile').attr('side'),token);
+            $scope.sendTokenCard($('#card-widget-mobile').attr('card'),token);
         };
 
         $scope.showTokens=function(){

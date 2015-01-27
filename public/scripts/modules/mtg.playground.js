@@ -150,12 +150,13 @@
             5863
         ] };
 
+        $scope.isHandConcealed=true;
         $scope.dragCardOptions = {containment: '#game-area' ,grid: [10, 10], snap: '.exile,.graveyard,.library,.hand,.battlefield',snapTolerance: 10};
 
         $scope.toBattlefield = function (event, ui) {
             console.log('toBattlefield');
             GameAreaService.cardIn(ui.draggable, 'battlefield');
-            //ui.draggable.addClass('flipped');
+            //ui.draggable.find('.flipped').removeClass('flipped');
             $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'battlefield');
 
             $scope.reorganize(side);
@@ -184,6 +185,7 @@
             $scope.reorganize(side);
         };
 
+        // todo back to library?! dialog??
         $scope.toLibrary = function (event, ui) {
             console.log('toLibrary');
             GameAreaService.cardIn(ui.draggable, 'library');
@@ -204,20 +206,18 @@
 
         $scope.cardAction = function (id, side, multiverseid) {
             if ($.browser.mobile) {
-                console.log('mobile',id, side, multiverseid);
                 GameAreaService.cardContextMobile(id, side, multiverseid);
             }
             else {
                 if (side === 'my') {
                     GameAreaService.tap(id, side);
+                    $scope.sendTapCard(id);
                 }
             }
         };
 
         $scope.searchCards=function(side,which){
-            if (side==='my'){
-                GameAreaService.closeSidebar();
-            }
+            GameAreaService.closeSidebar();
             GameAreaService.searchCards(side,which);
         };
 
@@ -284,10 +284,6 @@
             $scope.reorganize(side);
         };
 
-        $scope.dragCard=function(){
-
-        };
-
         $scope.reorganize = function (side) {
             var hand = $hand.my;
             if (side==='op'){
@@ -321,6 +317,7 @@
         };
 
         $scope.changePoints=function(what,points){
+            $scope.sendPoints(what,points);
             if (what==='hitpoints'){
                 if (points==='lose'){
                     $rootScope.my.hitpoints--;
@@ -328,7 +325,7 @@
                 else if (points==='gain'){
                     $rootScope.my.hitpoints++;
                 }
-                $('#my-battlefield').attr('data-hitpoints',$rootScope.my.hitpoints);
+                //$('#my-battlefield').attr('data-hitpoints',$rootScope.my.hitpoints);
             }
             else {
                 if (points==='lose'){
@@ -343,6 +340,26 @@
         $scope.countCards=function(side,which){
             return $('.'+side+'.card-min.in-'+which).length;
         };
+
+        function changeOpPoints(what,points){
+            if (what==='hitpoints'){
+                if (points==='lose'){
+                    $rootScope.op.hitpoints--;
+                }
+                else if (points==='gain'){
+                    $rootScope.op.hitpoints++;
+                }
+                //$('#my-battlefield').attr('data-hitpoints',$rootScope.op.hitpoints);
+            }
+            else {
+                if (points==='lose'){
+                    $rootScope.op.infection--;
+                }
+                else if (points==='gain'){
+                    $rootScope.op.infection++;
+                }
+            }
+        }
 
         // Socket listeners
         // ================
@@ -367,7 +384,8 @@
                     zIndex: data.offset.zIndex,
                     left: data.offset.left,
                     top: (data.offset.top/2)
-                }).addClass('flipped');
+                });
+                //$('#op_'+data.offset.id+' img.front-side').removeClass('flipped');
             }
             $scope.reorganize('op');
         });
@@ -376,10 +394,23 @@
             console.log('playground:action',data,data.appendix);
 
             if (data.action==='draw') {
+                $rootScope.op.library=data.appendix.library;
                 var $card = GameAreaService.drawCard(data.appendix.multiverseid, 'op', data.appendix.id);
                 $compile($card)($scope);
                 $game.append($card);
                 $scope.reorganize('op');
+            }
+            if (data.action==='tap') {
+                GameAreaService.tap(data.appendix.id,'op');
+            }
+            if (data.action==='token'){
+                GameAreaService.setToken(data.appendix.id,'op',data.appendix.token);
+            }
+            if (data.action==='revealHand'){
+                $game.toggleClass('reveal-hand');
+            }
+            if (data.action==='points'){
+                changeOpPoints(data.appendix.what,data.appendix.points);
             }
         });
 
@@ -402,10 +433,36 @@
         };
         $scope.sendDrawCard=function($card){
             var appendix = {
+                library: $rootScope.my.library,
                 multiverseid: $card.attr('multiverseid'),
                 id: $card.attr('number')
             };
             socket.emit('playground:action', { action: 'draw', appendix: appendix });
+        };
+        $scope.sendTapCard=function(id){
+            var appendix = {
+                id: id
+            };
+            socket.emit('playground:action', { action: 'tap', appendix: appendix });
+        };
+        $scope.sendTokenCard=function(id,token){
+            var appendix = {
+                token: token,
+                id: id
+            };
+            socket.emit('playground:action', { action: 'token', appendix: appendix });
+        };
+        $scope.sendRevealHand=function(){
+            GameAreaService.closeSidebar();
+            $scope.isHandConcealed=!$scope.isHandConcealed;
+            socket.emit('playground:action', { action: 'revealHand', appendix: null });
+        };
+        $scope.sendPoints=function(what,points){
+            var appendix = {
+                what: what,
+                points: points
+            };
+            socket.emit('playground:action', { action: 'points', appendix: appendix });
         };
     });
 
@@ -515,7 +572,16 @@
         }
 
         function handTop(side){
-            var top = (side === 'op') ? 0 : library.my.offset().top;
+            return (side === 'op') ? 51 : library.my.offset().top;
+        }
+
+        function setToken(id,side,token){
+            if (token>0) {
+                getCardElement(id,side).addClass('has-token').attr('data-token', token);
+            }
+            else {
+                getCardElement(id,side).removeClass('has-token').removeAttr('data-token');
+            }
         }
 
         return {
@@ -530,7 +596,8 @@
             'getCardElement':getCardElement,
             'getNewCardElement':getNewCardElement,
             'drawCard':drawCard,
-            'handTop':handTop
+            'handTop':handTop,
+            'setToken':setToken
         };
     }]);
 
