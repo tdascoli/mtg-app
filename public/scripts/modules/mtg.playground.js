@@ -185,7 +185,6 @@
             $scope.reorganize(side);
         };
 
-        // todo back to library?! dialog??
         $scope.toLibrary = function (event, ui) {
             console.log('toLibrary');
             GameAreaService.putInLibrary(ui.draggable.attr('number'),'my',ui.draggable.attr('multiverseid'));
@@ -205,7 +204,9 @@
 
         $scope.cardAction = function (id, side, multiverseid) {
             if ($.browser.mobile) {
-                GameAreaService.cardContextMobile(id, side, multiverseid);
+                if (side==='my' || (side==='op' && $game.hasClass('reveal-hand'))){
+                    GameAreaService.cardContextMobile(id, side, multiverseid);
+                }
             }
             else {
                 if (side === 'my') {
