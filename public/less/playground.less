@@ -37,7 +37,8 @@
   height: @card-min-height;
 }
 
-#my-battlefield:before {
+#my-battlefield:before,
+#op-battlefield:after {
   content: attr(data-hitpoints);
   position: absolute;
   right: 5px;
@@ -45,16 +46,13 @@
   color: #777;
 }
 #op-battlefield:after {
-  content: attr(data-hitpoints);
-  position: absolute;
   left: 5px;
-  top: 275px;
-  font-weight: bold;
-  color: #777;
 }
 
 .hand {
-  width: (310 - (3 * (@card-min-width+2)));
+  //width: calc(100% - (3 * (@card-min-width+2)));
+  // width: calc(~'100% - ' (@card-xs-min-width*3)+3);
+  width: calc(~'100% - ' (3 * (@card-min-width+2)));
   //width: 310-(@card-min-width+2);
 }
 .phase span {

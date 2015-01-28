@@ -35,7 +35,7 @@
             </div>
             <div id="op-hand" class="hand"></div>
         </div>
-        <div data-hitpoints="{{op.hitpoints}}" id="op-battlefield" class="battlefield"></div>
+        <div mtg-battlefield data-hitpoints="{{op.hitpoints}}" id="op-battlefield" class="battlefield"></div>
     </div>
     <div id="phase" class="phase">
         <span ng-class="{active:phase.begin}" ng-click="setPhase('begin')">Begin</span>
@@ -45,7 +45,7 @@
         <span ng-class="{active:phase.end}" ng-click="setPhase('end')">End</span>
     </div>
     <div id="my-game-area">
-        <div data-hitpoints="{{my.hitpoints}}" id="my-battlefield" class="battlefield" jqyoui-droppable="{onDrop:'toBattlefield'}" data-jqyoui-options="{activeClass:'tapped'}" data-drop="true" ng-model="my.battlefield"></div>
+        <div mtg-battlefield data-hitpoints="{{my.hitpoints}}" id="my-battlefield" class="battlefield" jqyoui-droppable="{onDrop:'toBattlefield'}" data-jqyoui-options="{activeClass:'tapped'}" data-drop="true" ng-model="my.battlefield"></div>
         <div id="my-handlogic" class="handlogic">
             <div id="my-exile" class="exile" jqyoui-droppable="{onDrop:'toExile'}" data-drop="true">ex</div>
             <div id="my-graveyard" class="graveyard" jqyoui-droppable="{onDrop:'toGraveyard'}" data-drop="true">gr</div>
@@ -61,4 +61,5 @@
 <ng-include src="'/pages/playground/search-cards.html'"></ng-include>
 <ng-include src="'/pages/playground/card-context.html'"></ng-include>
 <ng-include src="'/pages/playground/chat-widget.html'"></ng-include>
+<ng-include src="'/pages/playground/library-widget.html'"></ng-include>
 <ng-include src="'/pages/playground/player-stats.html'"></ng-include>

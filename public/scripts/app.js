@@ -48,7 +48,10 @@
                 // mtg
                 {path: '/lobby', templateUrl: '/pages/lobby/lobby.html'},
                 {path: '/deck-builder', templateUrl: '/pages/deck-builder/deck-builder.html'},
-                {path: '/playground', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'}
+                {path: '/playground', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
+                // security
+                {path: '/login', templateUrl: '/pages/common/login.html', controller: 'LoginCtrl'},
+                {path: '/signup', templateUrl: '/pages/common/signup.html', controller: 'SignupCtrl'}
             ];
 
             for (var i = 0; i < routes.length; i++) {

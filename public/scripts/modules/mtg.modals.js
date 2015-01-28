@@ -130,6 +130,18 @@
             $scope.removeCards.push(index);
             $('#card_'+index).addClass('selected');
         };
+
+        $scope.putInLibraryModal=function(where){
+            var multiverseid=$('#library-widget').attr('multiverseid');
+            if (where=='bottom'){
+                $scope.my.library.push(multiverseid);
+            }
+            else {
+                $scope.my.library.unshift(multiverseid);
+            }
+            GameAreaService.removeCard($('#library-widget').attr('number'),'my');
+            $('#library-widget').modal('hide');
+        };
     });
 
 }());

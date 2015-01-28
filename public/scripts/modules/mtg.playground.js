@@ -188,9 +188,8 @@
         // todo back to library?! dialog??
         $scope.toLibrary = function (event, ui) {
             console.log('toLibrary');
-            GameAreaService.cardIn(ui.draggable, 'library');
-            GameAreaService.placeIn(ui.draggable, $('#my-library').offset());
-            $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'library');
+            GameAreaService.putInLibrary(ui.draggable.attr('number'),'my',ui.draggable.attr('multiverseid'));
+            $scope.sendCardToLibrary(ui.draggable.attr('number'));
             $scope.reorganize(side);
         };
 
@@ -412,6 +411,10 @@
             if (data.action==='points'){
                 changeOpPoints(data.appendix.what,data.appendix.points);
             }
+            if (data.action==='toLibrary'){
+                $rootScope.op.library=data.appendix.library;
+                GameAreaService.removeCard(data.appendix.id,'op')
+            }
         });
 
         // Methods published to the scope
@@ -463,6 +466,13 @@
                 points: points
             };
             socket.emit('playground:action', { action: 'points', appendix: appendix });
+        };
+        $scope.sendCardToLibrary=function(id){
+            var appendix = {
+                library: $rootScope.my.library,
+                id: id
+            };
+            socket.emit('playground:action', { action: 'toLibrary', appendix: appendix });
         };
     });
 
@@ -534,6 +544,12 @@
             $('#search-cards').modal();
         }
 
+        function putInLibrary(id,side,multiverseid) {
+            $('#library-widget').attr('multiverseid', multiverseid);
+            $('#library-widget').attr('number', id);
+            $('#library-widget').modal();
+        }
+
         function closeSidebar(){
             $('#playgroundnav').collapse('hide');
         }
@@ -584,6 +600,10 @@
             }
         }
 
+        function removeCard(id,side){
+            $('#'+side+'_'+id).remove();
+        }
+
         return {
             'cardContextMobile': cardContextMobile,
             'cardIn': cardIn,
@@ -597,7 +617,9 @@
             'getNewCardElement':getNewCardElement,
             'drawCard':drawCard,
             'handTop':handTop,
-            'setToken':setToken
+            'setToken':setToken,
+            'removeCard':removeCard,
+            'putInLibrary':putInLibrary
         };
     }]);
 

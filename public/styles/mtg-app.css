@@ -64,6 +64,9 @@ span.mtg {
   overflow-y: auto;
   font-size: 0.809em;
 }
+li hr {
+  margin: 0;
+}
 #game-area {
   height: 535px;
 }
@@ -100,7 +103,8 @@ span.mtg {
   width: 40px;
   height: 55px;
 }
-#my-battlefield:before {
+#my-battlefield:before,
+#op-battlefield:after {
   content: attr(data-hitpoints);
   position: absolute;
   right: 5px;
@@ -108,15 +112,10 @@ span.mtg {
   color: #777;
 }
 #op-battlefield:after {
-  content: attr(data-hitpoints);
-  position: absolute;
   left: 5px;
-  top: 275px;
-  font-weight: bold;
-  color: #777;
 }
 .hand {
-  width: 184px;
+  width: calc(100% -  126px);
 }
 .phase span {
   width: 19%;
@@ -293,4 +292,35 @@ button.playgroundnav {
 }
 .op.has-token:after {
   background: #8b0000;
+}
+body.login {
+  background-color: #fff;
+}
+.login-screen {
+  padding-top: 2.6em;
+}
+.login-form {
+  width: 350px;
+  margin: 0 auto;
+  padding: 24px 23px 20px;
+  background-color: #eee;
+  border-radius: 6px;
+  width: 100%;
+}
+.login-form h3 {
+  margin: 0 0 15px 0;
+  color: #000;
+  font-weight: 700;
+}
+.login-form input {
+  border: none;
+  margin-bottom: 0.809em;
+}
+.login-link {
+  display: block;
+  margin-top: 15px;
+  font-size: 0.809em;
+  color: #BFC9CA;
+  text-align: center;
+  cursor: pointer;
 }

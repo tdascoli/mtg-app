@@ -1,0 +1,20 @@
+<alert alert-severity="danger" ng-show="errors">
+    <strong>{{ errors.email }} {{ errors.password }} {{ error.other }}</strong>
+</alert>
+
+<div class="login-screen">
+    <div class="login-form">
+        <h3>Welcome to <span class="mtg">mtg</span></h3>
+        <form name="form"
+              ng-submit="login(form)"
+              novalidate>
+            <input type="text" form-input id="username" placeholder="Username" />
+            <input type="password" form-input id="password" placeholder="Password" />
+            <button class="login btn-primary btn-block">Log in</button>
+            <a href="#" class="login-link">Lost your password?</a>
+            <a href="#/signup" class="login-link">Register</a>
+        </form>
+    </div>
+</div>
+
+
