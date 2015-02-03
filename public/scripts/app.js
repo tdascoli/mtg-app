@@ -25,8 +25,7 @@
         'mtg.variables',
         'mtg.chat',
         'btford.socket-io',
-        'ngDragDrop',
-        'ui.bootstrap.tabs'
+        'ngDragDrop'
     ];
 
     /**
