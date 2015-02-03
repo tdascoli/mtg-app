@@ -3,7 +3,7 @@
 
     var module = angular.module('mtg.modals', ['ngLodash']);
 
-    module.controller('GameModalCtrl', function ($scope,$rootScope,$compile,lodash,GameAreaService) {
+    module.controller('GameModalCtrl', function ($scope,$compile,lodash,GameAreaService) {
 
         $scope.amountCards=0;
         $scope.showCards=false;

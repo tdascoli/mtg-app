@@ -1,0 +1,18 @@
+<div class="modal fade" id="import-widget" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <select form-select name="parseMethod" id="parseMethod" ng-model="parseMethod">
+                    <option value="mtgo">MTG Online</option>
+                    <option value="mtgw">Magic Workstation</option>
+                    <option value="mtgs">MTG Salvation</option>
+                </select>
+                <textarea form-textarea ng-model="deckToParse"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm btn-primary" ng-click="parseDeck()">Parse deck</button>
+                <button class="btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

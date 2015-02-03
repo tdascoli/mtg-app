@@ -5,7 +5,7 @@
 
 var express = require('express'),
     routes = require('./routes'),
-    api = require('./routes/api'),
+    //api = require('./routes/api'),
     http = require('http'),
     path = require('path'),
     fs = require('fs'),
@@ -57,7 +57,7 @@ app.use(express.session({
 }));
 
 // JSON API
-app.get('/api/name', api.name);
+//app.get('/api/name', api.name);
 
 
 // Socket.io Communication

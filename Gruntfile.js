@@ -100,7 +100,9 @@
                             'lib/angular-ui-bootstrap/src/tooltip/tooltip.js',
                             'lib/angular-ui-bootstrap/src/typeahead/typeahead.js',
                             'lib/angular-ui-bootstrap/src/modal/modal.js',
-                            'lib/angular-ui-bootstrap/src/transition/transition.js'
+                            'lib/angular-ui-bootstrap/src/transition/transition.js',
+                            'lib/lodash/dist/lodash.js',
+                            'lib/restangular/dist/restangular.js'
                         ]
                     }
                 }

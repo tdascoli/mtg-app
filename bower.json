@@ -41,7 +41,8 @@
     "jquery": "2.1.1",
     "alv-ch-ng":"~0.2.1",
     "jquery-ui": "latest",
-    "jqueryui-touch-punch":"latest"
+    "jqueryui-touch-punch":"latest",
+    "lodash":"latest"
   },
   "devDependencies": {
     "less": "1.7.0"

@@ -8,6 +8,7 @@
      */
     var dependencies = [
         'ngRoute',
+        'restangular',
         'ngCookies',
         'ngResource',
         'ngTouch',
@@ -24,7 +25,8 @@
         'mtg.variables',
         'mtg.chat',
         'btford.socket-io',
-        'ngDragDrop'
+        'ngDragDrop',
+        'ui.bootstrap.tabs'
     ];
 
     /**
@@ -35,7 +37,7 @@
     /**
      * xSite request & routing definitions
      */
-    app.config(function ($routeProvider, $httpProvider) {
+    app.config(function ($routeProvider, $httpProvider, RestangularProvider) {
             /** Enable cross domain communication **/
             $httpProvider.defaults.headers.useXDomain = true;
             delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -47,7 +49,7 @@
                 {path: '/chat', templateUrl: '/pages/playground/chat.html', controller: 'ChatCtrl'},
                 // mtg
                 {path: '/lobby', templateUrl: '/pages/lobby/lobby.html'},
-                {path: '/deck-builder', templateUrl: '/pages/deck-builder/deck-builder.html'},
+                {path: '/deck-builder', templateUrl: '/pages/deck-builder/deck-builder.html', controller: 'DeckBuilderCtrl'},
                 {path: '/playground', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 // security
                 {path: '/login', templateUrl: '/pages/common/login.html', controller: 'LoginCtrl'},
@@ -73,6 +75,10 @@
 
             /** 404 **/
             $routeProvider.otherwise({templateUrl: '/pages/common/404.html'});
+
+            // restangular
+            RestangularProvider.setBaseUrl('/data/');
+            RestangularProvider.setRequestSuffix('.json');
         }
     );
 

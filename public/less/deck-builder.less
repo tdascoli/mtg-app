@@ -1,0 +1,66 @@
+#set-cards {
+  float: left;
+  width: 49.5%;
+  margin-right: 0.5%;
+}
+#deck-cards {
+  float: left;
+  width: 49.5%;
+  margin-left: 0.5%;
+}
+.deck-builder ul.results {
+  padding: 0;
+  list-style-type: none;
+}
+.deck-builder ul.results li {
+  float: left;
+  width: 49%;
+  margin-right: 1%;
+}
+.deck-builder ul.results li img {
+  width: 100%;
+}
+.deck-builder .nav-tabs {
+  border: none;
+}
+.deck-builder .nav-tabs li {
+  width: 50%;
+  font-weight: bold;
+  border: none;
+  font-size: 0.809em;
+  text-align: center;
+}
+.deck-builder .nav-tabs li.active {
+  border: none;
+  background-color: transparent;
+}
+
+.deck-builder .nav-tabs li:first-of-type:not(.active) {
+  background: linear-gradient(-225deg,#fff 25%,#ccc);
+}
+.deck-builder .nav-tabs li:last-of-type:not(.active) {
+  background: linear-gradient(225deg,#fff 25%,#ccc);
+}
+
+.deck-builder .nav-tabs li:first-of-type:not(.active):before {
+  content: "";
+  position: absolute;
+  border-bottom: 42px solid #fff;
+  border-left: 6px solid transparent;
+  right: 0;
+}
+.deck-builder .nav-tabs li:last-of-type:not(.active):before {
+  content: "";
+  position: absolute;
+  border-bottom: 42px solid #fff;
+  border-right: 6px solid transparent;
+  left: 0;
+}
+
+.deck-builder .nav-tabs li a {
+  padding-top: 0.5em;
+  border: none;
+}
+.deck-builder .nav-tabs li a:focus {
+  border: none;
+}

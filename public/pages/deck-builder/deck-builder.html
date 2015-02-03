@@ -1,1 +1,54 @@
-<h1>deck builder</h1>
+<div class="fake-sidebar collapse">
+    <div id="card-widget" class="hidden-xs">
+        <img src="/images/card-back.jpeg" />
+    </div>
+    <div class="nav navbar-nav playground">
+        <ul class="nav navbar-default">
+            <li><a class="playgroundnav" ng-click="drawFullHand()">Draw full hand</a></li>
+            <li>
+                <a class="playgroundnav" ng-click="sendRevealHand()">
+                    <span style="font-weight: normal;" ng-show="isHandConcealed">Reveal</span>
+                    <span style="font-weight: normal;" ng-hide="isHandConcealed">Conceal</span> hand
+                </a>
+            </li>
+            <li><a class="playgroundnav" ng-click="untapAll()">Untap all</a></li>
+            <li><hr /></li>
+            <li><button class="playgroundnav" ng-click="searchCards('my','library')" ng-disabled="!my.library.length">Search library</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('my','graveyard')" ng-disabled="!countCards('my','graveyard')">Search graveyard</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('my','exile')" ng-disabled="!countCards('my','exile')">Search exiled cards</button></li>
+            <li><hr /></li>
+            <li><button class="playgroundnav" ng-click="searchCards('op','graveyard')" ng-disabled="!countCards('op','graveyard')">Opponents graveyard</button></li>
+            <li><button class="playgroundnav" ng-click="searchCards('op','exile')" ng-disabled="!countCards('op','exile')">Oppenents exiled cards</button></li>
+        </ul>
+    </div>
+</div>
+<div mtg-playground class="content deck-builder">
+    <tabset>
+        <tab heading="Choose set">
+            <select form-input form-label="Choose set" class="input-sm" ng-change="setSet()" ng-model="selectedSet" name="sets" id="sets" ng-options="item.code as item.name for item in setList"></select>
+        </tab>
+        <tab heading="Search card">
+            <input form-input form-label="Search card" class="input-sm" type="text" name="search" id="search-card" placeholder="search card" form-append="search" form-append-icon="true" form-append-btn-submit="true" form-append-btn="searchCard()" ng-model="search" />
+        </tab>
+    </tabset>
+
+    <input form-input form-label="Deck" class="input-sm" type="text" name="deck" id="deck" ng-model="deck.name" />
+
+    <span ng-show="cards">{{cards.name}} ({{cards.cards.length}})</span>
+
+    <div id="set-cards">
+        <ul class="results" ng-show="cards">
+            <li ng-repeat="card in cards.cards">
+                <img ng-click="toDeck(card.multiverseid)" ng-src="http://mtgimage.com/multiverseid/{{card.multiverseid}}.jpg" />
+            </li>
+        </ul>
+    </div>
+    <div id="deck-cards" ng-show="deck.cards">
+        <pre>{{ test | json }}</pre>
+        <ul class="results">
+            <li ng-repeat="card in deck.cards track by $index"><img src="http://mtgimage.com/multiverseid/{{card}}.jpg" class="search-card" /></li>
+        </ul>
+    </div>
+</div>
+<ng-include src="'/pages/playground/card-context.html'"></ng-include>
+<ng-include src="'/pages/deck-builder/import-widget.html'"></ng-include>

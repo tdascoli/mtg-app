@@ -38,7 +38,9 @@
     "ejs": "~0.8.4",
     "socket.io":"latest",
     "socket.io-client":"latest",
-    "mtg-parser": "latest"
+    "mtg-parser": "latest",
+    "lodash": "~2.4.1",
+    "json-server": "latest"
   },
   "devDependencies": {
     "grunt": "*",
