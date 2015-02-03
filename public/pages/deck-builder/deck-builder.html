@@ -23,14 +23,20 @@
     </div>
 </div>
 <div mtg-playground class="content deck-builder">
-    <tabset>
-        <tab heading="Choose set">
-            <select form-input form-label="Choose set" class="input-sm" ng-change="setSet()" ng-model="selectedSet" name="sets" id="sets" ng-options="item.code as item.name for item in setList"></select>
-        </tab>
-        <tab heading="Search card">
-            <input form-input form-label="Search card" class="input-sm" type="text" name="search" id="search-card" placeholder="search card" form-append="search" form-append-icon="true" form-append-btn-submit="true" form-append-btn="searchCard()" ng-model="search" />
-        </tab>
-    </tabset>
+    <div role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a data-target="#set" aria-controls="set" role="tab" data-toggle="tab">Choose set</a></li>
+            <li role="presentation"><a data-target="#search" aria-controls="search" role="tab" data-toggle="tab">Search card</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="set">
+                <select form-input form-label="Choose set" class="input-sm" ng-change="setSet()" ng-model="selectedSet" name="sets" id="sets" ng-options="item.code as item.name for item in setList"></select>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="search">
+                <input form-input form-label="Search card" class="input-sm" type="text" name="search" id="search-card" placeholder="search card" form-append="search" form-append-icon="true" form-append-btn-submit="true" form-append-btn="searchCard()" ng-model="search" />
+            </div>
+        </div>
+    </div>
 
     <input form-input form-label="Deck" class="input-sm" type="text" name="deck" id="deck" ng-model="deck.name" />
 

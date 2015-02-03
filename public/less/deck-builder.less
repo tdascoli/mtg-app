@@ -31,7 +31,7 @@
   text-align: center;
 }
 .deck-builder .nav-tabs li.active {
-  border: none;
+  border: none !important;
   background-color: transparent;
 }
 
@@ -59,8 +59,9 @@
 
 .deck-builder .nav-tabs li a {
   padding-top: 0.5em;
-  border: none;
+  border: none !important;
 }
-.deck-builder .nav-tabs li a:focus {
-  border: none;
+.deck-builder .nav-tabs li a:focus,
+.deck-builder .nav-tabs li.active a:focus{
+  border: none !important;
 }
