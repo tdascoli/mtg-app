@@ -13,9 +13,8 @@
         $rootScope.debug=false;
 
         $scope.hostGame=function(){
-            $scope.games.push('test-game');
-            socket.emit('host', 'test-game');
-            $location.path('/playground/'+'test-game');
+            socket.emit('host', $scope.game);
+            $location.path('/playground/'+$scope.game);
         };
 
         $scope.debugGame=function(){
