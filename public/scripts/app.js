@@ -16,7 +16,6 @@
         'alv-ch-ng.ui-core',
         'alv-ch-ng.ui-forms',
         'alv-ch-ng.ui-scroll',
-        'http-auth-interceptor',
         'common.constants',
         'mtg.main',
         'mtg.playground',
@@ -25,7 +24,8 @@
         'mtg.variables',
         'mtg.chat',
         'btford.socket-io',
-        'ngDragDrop'
+        'ngDragDrop',
+        'mtg.auth'
     ];
 
     /**
@@ -38,9 +38,10 @@
      */
     app.config(function ($routeProvider, $httpProvider, RestangularProvider) {
             /** Enable cross domain communication **/
-            $httpProvider.defaults.headers.useXDomain = true;
+            /*$httpProvider.defaults.headers.useXDomain = true;
+            $httpProvider.defaults.withCredentials = true;
             delete $httpProvider.defaults.headers.common['X-Requested-With'];
-
+            */
             /** -- Routings -- **/
             var routes = [
                 {path: '/', redirectTo: '/lobby'},
@@ -50,6 +51,7 @@
                 {path: '/lobby', templateUrl: '/pages/lobby/lobby.html'},
                 {path: '/deck-builder', templateUrl: '/pages/deck-builder/deck-builder.html', controller: 'DeckBuilderCtrl'},
                 {path: '/playground', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
+                {path: '/playground/:game', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 // security
                 {path: '/login', templateUrl: '/pages/common/login.html', controller: 'LoginCtrl'},
                 {path: '/signup', templateUrl: '/pages/common/signup.html', controller: 'SignupCtrl'}
@@ -101,4 +103,22 @@
 
         $translateProvider.useLocalStorage();
     });
+
+    app.run(['$rootScope', '$location', '$cookieStore', '$http','socket',
+        function ($rootScope, $location, $cookieStore, $http, socket) {
+            // keep user logged in after page refresh
+            $rootScope.globals = $cookieStore.get('globals') || {};
+            if ($rootScope.globals.currentUser) {
+                $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
+
+                socket.emit('user:login', $rootScope.globals.currentUser.username);
+            }
+
+            $rootScope.$on('$locationChangeStart', function (event, next, current) {
+                // redirect to login page if not logged in
+                if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
+                    $location.path('/login');
+                }
+            });
+        }]);
 }());

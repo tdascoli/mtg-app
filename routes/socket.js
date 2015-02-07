@@ -115,6 +115,13 @@ module.exports = function (socket) {
     name: name
   });
 
+    // notify other clients that a new user has loggedin
+    socket.on('user:login', function (data) {
+        socket.broadcast.emit('send:message', {
+            user: data
+        });
+    });
+
   // broadcast a user's message to other users
   socket.on('send:message', function (data) {
     socket.broadcast.emit('send:message', {

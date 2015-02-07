@@ -75,12 +75,11 @@
                         </li>
                     </ul>
                     <ul class="subnavbar nav navbar-nav navbar-highlight navbar-right">
-                        <li ng-show="currentUser">
-                            <a href="#/account" class="pointer"><span translate="hello" translate-values="{name: currentUser.username}"></span> <marker marker-squared="true" marker-severity="info">2</marker><span class="caret"></span></a>
+                        <li ng-show="globals.currentUser">
+                            <a href="#/account" class="pointer"><span translate="hello" translate-values="{name: globals.currentUser.username}"></span> <marker marker-squared="true" marker-severity="info">2</marker><span class="caret"></span></a>
                         </li>
                         <li>
-                            <a ng-click="logout()" class="pointer" ng-show="currentUser">Logout <glyph icon="log-out"></glyph></a>
-                            <a href="#/login" ng-show="!currentUser">Login <glyph icon="log-in"></glyph></a>
+                            <a ng-click="logout()" class="pointer" ng-show="globals.currentUser">Logout <glyph icon="log-out"></glyph></a>
                         </li>
                     </ul>
                     <div class="navbar-right">
@@ -114,6 +113,7 @@
     <script src="lib/alv-ch-ng/alv-ch-ng.ui-scroll.js"></script>
 
     <script src="scripts/app.js"></script>
+    <script src="scripts/modules/authentication.js"></script>
     <script src="scripts/modules/common.constants.js"></script>
     <script src="scripts/modules/mtg.main.js"></script>
     <script src="scripts/modules/mtg.playground.js"></script>

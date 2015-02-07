@@ -39,8 +39,7 @@
     "socket.io":"latest",
     "socket.io-client":"latest",
     "mtg-parser": "latest",
-    "lodash": "~2.4.1",
-    "json-server": "latest"
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "grunt": "*",

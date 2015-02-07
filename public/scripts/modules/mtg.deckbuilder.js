@@ -20,6 +20,7 @@
         $scope.toDeck=function(multiverseid){
             $scope.deck.cards.push(multiverseid);
         };
+
         $scope.removeFromDeck=function(index){
             $scope.deck.cards.splice(index, 1);
         };

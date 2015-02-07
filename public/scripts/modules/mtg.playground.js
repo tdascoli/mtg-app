@@ -3,13 +3,23 @@
 
     var module = angular.module('mtg.playground', ['mtg.variables','mtg.socket','ngLodash']);
 
-    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, socket, lodash, currentCard, GameAreaService) {
+    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, $routeParams, socket, lodash, currentCard, GameAreaService) {
         var $game = $('#game-area');
         var $library = {my:$('#my-library'),op:$('#op-library')};
         var $hand = {my:$('#my-hand'),op:$('#op-hand')};
         var $graveyard = {my:$('#my-graveyard'),op:$('#op-graveyard')};
         var $exile = {my:$('#my-exile'),op:$('#op-exile')};
         var side = 'my';
+
+        /*var room=prompt("choose room:");
+        socket.emit('switchRoom', room);
+
+        socket.emit('sendchat', 'test message');*/
+
+        // join game
+        if ($routeParams.game) {
+            socket.emit('host:join', $routeParams.game);
+        }
 
         $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
         $rootScope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
@@ -366,55 +376,57 @@
 
         socket.on('playground:drag', function (data) {
             console.log('playground:drag',data,data.offset);
-
-            if (data.offset.where!=='battlefield'){
-                GameAreaService.cardIn($('#op_'+data.offset.id), data.offset.where);
-                var offset=$graveyard.op;
-                if (data.offset.where==='hand'){
-                    offset=$hand.op;
+            if (data.user!==$rootScope.globals.currentUser.username || $scope.debug) {
+                if (data.offset.where !== 'battlefield') {
+                    GameAreaService.cardIn($('#op_' + data.offset.id), data.offset.where);
+                    var offset = $graveyard.op;
+                    if (data.offset.where === 'hand') {
+                        offset = $hand.op;
+                    }
+                    if (data.offset.where === 'exile') {
+                        offset = $exile.op;
+                    }
+                    GameAreaService.placeIn($('#op_' + data.offset.id), offset.offset());
                 }
-                if (data.offset.where==='exile'){
-                    offset=$exile.op;
+                else {
+                    GameAreaService.cardIn($('#op_' + data.offset.id), data.offset.where);
+                    $('#op_' + data.offset.id).css({
+                        zIndex: data.offset.zIndex,
+                        left: data.offset.left,
+                        top: (data.offset.top / 2)
+                    });
+                    //$('#op_'+data.offset.id+' img.front-side').removeClass('flipped');
                 }
-                GameAreaService.placeIn($('#op_'+data.offset.id),offset.offset());
+                $scope.reorganize('op');
             }
-            else {
-                GameAreaService.cardIn($('#op_'+data.offset.id), data.offset.where);
-                $('#op_'+data.offset.id).css({
-                    zIndex: data.offset.zIndex,
-                    left: data.offset.left,
-                    top: (data.offset.top/2)
-                });
-                //$('#op_'+data.offset.id+' img.front-side').removeClass('flipped');
-            }
-            $scope.reorganize('op');
         });
 
         socket.on('playground:action', function (data) {
             console.log('playground:action',data,data.appendix);
-
-            if (data.action==='draw') {
-                $rootScope.op.library=data.appendix.library;
-                var $card = GameAreaService.drawCard(data.appendix.multiverseid, 'op', data.appendix.id);
-                $compile($card)($scope);
-                $game.append($card);
-                $scope.reorganize('op');
-            }
-            if (data.action==='tap') {
-                GameAreaService.tap(data.appendix.id,'op');
-            }
-            if (data.action==='token'){
-                GameAreaService.setToken(data.appendix.id,'op',data.appendix.token);
-            }
-            if (data.action==='revealHand'){
-                $game.toggleClass('reveal-hand');
-            }
-            if (data.action==='points'){
-                changeOpPoints(data.appendix.what,data.appendix.points);
-            }
-            if (data.action==='toLibrary'){
-                $rootScope.op.library=data.appendix.library;
-                GameAreaService.removeCard(data.appendix.id,'op')
+            if (data.user!==$rootScope.globals.currentUser.username || $scope.debug) {
+                if (data.action === 'draw') {
+                    $rootScope.op.library = data.appendix.library;
+                    var $card = GameAreaService.drawCard(data.appendix.multiverseid, 'op', data.appendix.id);
+                    $compile($card)($scope);
+                    $game.append($card);
+                    $scope.reorganize('op');
+                }
+                if (data.action === 'tap') {
+                    GameAreaService.tap(data.appendix.id, 'op');
+                }
+                if (data.action === 'token') {
+                    GameAreaService.setToken(data.appendix.id, 'op', data.appendix.token);
+                }
+                if (data.action === 'revealHand') {
+                    $game.toggleClass('reveal-hand');
+                }
+                if (data.action === 'points') {
+                    changeOpPoints(data.appendix.what, data.appendix.points);
+                }
+                if (data.action === 'toLibrary') {
+                    $rootScope.op.library = data.appendix.library;
+                    GameAreaService.removeCard(data.appendix.id, 'op')
+                }
             }
         });
 
@@ -433,7 +445,7 @@
                 where: where
             };
 
-            socket.emit('playground:drag', { offset: pos });
+            socket.emit('playground:drag', { user: $rootScope.globals.currentUser.username, offset: pos });
         };
         $scope.sendDrawCard=function($card){
             var appendix = {
@@ -441,39 +453,39 @@
                 multiverseid: $card.attr('multiverseid'),
                 id: $card.attr('number')
             };
-            socket.emit('playground:action', { action: 'draw', appendix: appendix });
+            socket.emit('playground:action', { action: 'draw', user: $rootScope.globals.currentUser.username, appendix: appendix });
         };
         $scope.sendTapCard=function(id){
             var appendix = {
                 id: id
             };
-            socket.emit('playground:action', { action: 'tap', appendix: appendix });
+            socket.emit('playground:action', { action: 'tap', user: $rootScope.globals.currentUser.username, appendix: appendix });
         };
         $scope.sendTokenCard=function(id,token){
             var appendix = {
                 token: token,
                 id: id
             };
-            socket.emit('playground:action', { action: 'token', appendix: appendix });
+            socket.emit('playground:action', { action: 'token', user: $rootScope.globals.currentUser.username, appendix: appendix });
         };
         $scope.sendRevealHand=function(){
             GameAreaService.closeSidebar();
             $scope.isHandConcealed=!$scope.isHandConcealed;
-            socket.emit('playground:action', { action: 'revealHand', appendix: null });
+            socket.emit('playground:action', { action: 'revealHand', user: $rootScope.globals.currentUser.username, appendix: null });
         };
         $scope.sendPoints=function(what,points){
             var appendix = {
                 what: what,
                 points: points
             };
-            socket.emit('playground:action', { action: 'points', appendix: appendix });
+            socket.emit('playground:action', { action: 'points', user: $rootScope.globals.currentUser.username, appendix: appendix });
         };
         $scope.sendCardToLibrary=function(id){
             var appendix = {
                 library: $rootScope.my.library,
                 id: id
             };
-            socket.emit('playground:action', { action: 'toLibrary', appendix: appendix });
+            socket.emit('playground:action', { action: 'toLibrary', user: $rootScope.globals.currentUser.username, appendix: appendix });
         };
     });
 
