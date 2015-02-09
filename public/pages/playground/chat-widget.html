@@ -4,7 +4,7 @@
             <div class="modal-body">
                 <div class="chat-message well">
                     <span ng-repeat="message in messages">
-                        <strong ng-class="{'text-primary':message.user===user,'text-danger':message.user!==user}">{{message.user}}:</strong> {{message.text}}
+                        <strong ng-class="{'text-primary':message.user===globals.currentUser.username,'text-danger':message.user!==globals.currentUser.username}">{{message.user}}:</strong> {{message.text}}
                         <br />
                     </span>
                 </div>

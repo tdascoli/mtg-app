@@ -6,15 +6,23 @@ module.exports = function (io) {
 
     io.on('connection', function (socket) {
 
-        // user
+        //=== chat
+        // broadcast a user's message to other users
+        socket.on('send:message', function (data) {
+            socket.broadcast.emit('send:message', {
+                user: name,
+                text: data.message
+            });
+        });
+
+        //=== user
         socket.on('user:login', function (username) {
             socket.username = username;
             usernames[username] = username;
             console.log('user login',username);
         });
 
-        // host games
-        //===
+        //=== host games
         socket.on('host', function(name){
             socket.emit('mtg:update', 'SERVER', socket.username+' host this game: '+name);
             // define game (room)
@@ -42,8 +50,7 @@ module.exports = function (io) {
             socket.emit('mtg:update', 'SERVER', username+' has connected to '+ game);
         }
 
-        // playground
-        //===
+        //=== playground
         socket.on('playground:drag', function (data) {
             console.log('drag',socket.username,socket.game);
             io.sockets.in(socket.game).emit('playground:drag', data);
@@ -53,11 +60,12 @@ module.exports = function (io) {
             io.sockets.in(socket.game).emit('playground:action', data);
         });
 
-        // common
-        //===
+        //=== common
 
         // when the user disconnects.. perform this
         socket.on('disconnect', function(){
+            // todo: inform opponent, save in db?!
+
             // remove the username from global usernames list
             delete usernames[socket.username];
             // update list of users in chat, client-side
