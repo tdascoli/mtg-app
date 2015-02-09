@@ -47,6 +47,8 @@
     "components": "[EN] Components",
     "datepicker": "[EN] Datepicker",
     "login":"Login",
-    "deckBuilder":"Deck-Builder"
+    "deckBuilder":"Deck-Builder",
+    "host":"Host game",
+    "debug":"Debug game"
   }
 }

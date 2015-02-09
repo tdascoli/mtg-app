@@ -34,12 +34,14 @@
     "grunt-push-release": "*",
     "grunt-htmlhint":"*",
     "connect-mongo":"*",
-    "mongoose": "~3.5.5",
+    "angoose": "latest",
     "ejs": "~0.8.4",
     "socket.io":"latest",
     "socket.io-client":"latest",
     "mtg-parser": "latest",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "underscore": "*",
+    "should":"*"
   },
   "devDependencies": {
     "grunt": "*",
@@ -48,11 +50,12 @@
     "time-grunt": "*",
     "bower": "*",
     "colors": "*",
-    "express": "~3.4.3",
+    "express": "3.10.4",
     "karma": "*",
     "phantomjs": "*",
     "selenium": "*",
     "travis": "*",
-    "browser-sync": "1.9.0"
+    "browser-sync": "1.9.0",
+    "log4js":"*"
   }
 }

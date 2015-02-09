@@ -25,7 +25,8 @@
         'mtg.chat',
         'btford.socket-io',
         'ngDragDrop',
-        'mtg.auth'
+        'mtg.auth',
+        'angoose.client'
     ];
 
     /**

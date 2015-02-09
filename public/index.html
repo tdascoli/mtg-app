@@ -70,8 +70,11 @@
                         <li active-startswith="/deck-builder">
                             <a href="#/deck-builder" class="pointer" translate="nav.deckBuilder"></a>
                         </li>
-                        <li active-startswith="/playground">
-                            <a href="#/playground" class="pointer" translate="nav.playgroundText"></a>
+                        <li show-startswith="/lobby">
+                            <a  data-toggle="modal" data-target="#host-game" class="pointer" translate="nav.host"></a>
+                        </li>
+                        <li show-startswith="/lobby">
+                            <a ng-click="debugGame()" class="pointer" translate="nav.debug"></a>
                         </li>
                     </ul>
                     <ul class="subnavbar nav navbar-nav navbar-highlight navbar-right">
@@ -100,9 +103,11 @@
     <!--./container -->
 
     <!-- scripts -->
-    <script src="/socket.io/socket.io.js"></script>
 
     <script src="lib/lib.min.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/angoose/angoose-client.js"></script>
 
     <script src="lib/alv-ch-ng/alv-ch-ng.common.js"></script>
     <script src="lib/alv-ch-ng/alv-ch-ng.translate.js"></script>

@@ -42,10 +42,8 @@
   "hello": "Hallo, {{name}}",
   "nav": {
     "welcome": "Welcome",
-    "gettingStarted": "Getting started",
-    "less": "Less",
-    "components": "Components",
-    "datepicker": "Datepicker",
+    "host":"Host game",
+    "debug":"Debug game",
     "deckBuilder":"Deck-Builder",
     "login":"Anmelden",
     "playgroundText":"Playground",

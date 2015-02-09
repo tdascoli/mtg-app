@@ -1,8 +1,7 @@
-'use strict';
-
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
-  crypto = require('crypto');
+var angoose = require("angoose"),
+    mongoose = angoose.getMongoose(),
+    Schema = mongoose.Schema,
+    crypto = require('crypto');
 
 var UserSchema = new Schema({
   email: {
@@ -122,4 +121,4 @@ UserSchema.methods = {
   }
 };
 
-mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

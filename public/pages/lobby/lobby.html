@@ -1,13 +1,10 @@
-<alert>Update available <button click="javascript:location.reload();">Update</button></alert>
+<alert alert-dismissable="true">Update available <button class="btn-sm" glyph-icon="refresh" click="javascript:location.reload();"> Update</button></alert>
 <h1>lobby</h1>
 <strong>Hello {{ getCredentials().currentUser.username }}</strong>
-<hr />
-<button data-toggle="modal" data-target="#host-game">Host game</button>
-<button ng-click="debugGame()">Debug game</button>
+
 <div class="well">
     <ul>
         <li ng-repeat="game in games"><a href="#/playground/{{game}}">{{game}}</a></li>
     </ul>
 </div>
-
 <ng-include src="'/pages/lobby/host-game.html'"></ng-include>
