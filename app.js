@@ -18,8 +18,6 @@ defaults.port=process.env.PORT || 3000;
 app.use(express.static(process.cwd() + '/public/'));
 
 // Socket.io Communication
-//io.sockets.on('connection', require('./routes/socket'));
-
 var io = require('socket.io').listen(app.listen(defaults.port));
 require('./server/socket')(io);
 
