@@ -6,7 +6,8 @@
     module.controller('DeckBuilderCtrl', function ($scope,$rootScope,$http,MTGJson,lodash, Deck) {
         $scope.cards=null;
         $scope.searchCards=[];
-        $scope.deck=new Deck({ name: 'New Deck', username: $rootScope.globals.currentUser.username, cards: [] });
+        var emptyDeck=new Deck({ name: 'New Deck', username: $rootScope.globals.currentUser.username, cards: [] });
+        $scope.deck=emptyDeck;
         $scope.parseDeck=false;
         $scope.selectedSet=false;
 
@@ -55,7 +56,7 @@
         };
 
         $scope.chooseDeck=function(deck){
-            console.log(deck);
+            $scope.deck = deck;
         };
 
         $scope.showCard=function(multiverseid){
@@ -65,9 +66,18 @@
             return '/images/card-back.jpeg';
         };
 
-        $scope.saveDeck=function(){
+        $rootScope.saveDeck=function(){
             $scope.deck.save(function(err, result){
                 console.log('SAVE',$scope.deck._id,err,result);
+            });
+        };
+
+        $rootScope.removeDeck=function(){
+            $scope.deck.remove(function(err, result){
+                console.log('REMOVE',$scope.deck._id,err,result);
+                if (!err){
+                    $scope.deck=emptyDeck;
+                }
             });
         };
     });

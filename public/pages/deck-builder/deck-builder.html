@@ -1,8 +1,4 @@
 <div mtg-playground class="deck-builder">
-    <button type="button" ng-click="saveDeck()">
-        <span glyph-icon="floppy-disk"></span>
-    </button>
-
     <div role="tabpanel">
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a data-target="#set" aria-controls="set" role="tab" data-toggle="tab">Choose set</a></li>
@@ -27,7 +23,7 @@
                     <button class="dropdown-toggle btn" type="button" data-toggle="dropdown" aria-expanded="false" ng-disabled="!deckList">Decks <span class="caret"></span></button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li role="presentation" ng-repeat="deck in deckList">
-                            <a role="menuitem" ng-click="chooseDeck(deck._id)">{{deck.name}}</a>
+                            <a role="menuitem" ng-click="chooseDeck(deck)">{{deck.name}}</a>
                         </li>
                     </ul>
                 </div>
@@ -38,19 +34,19 @@
         <!-- CARDS -->
         <ul class="results" ng-show="searchCards.length">
             <li ng-repeat="card in searchCards">
-                <img ng-click="toDeck(card)" ng-src="showCard({{card}})" />
+                <img ng-click="toDeck(card)" ng-src="{{showCard(card)}}" />
             </li>
         </ul>
         <!-- SETS -->
         <ul class="results" ng-show="cards">
             <li ng-repeat="card in cards.cards">
-                <img ng-click="toDeck(card.multiverseid)" ng-src="showCard({{card.multiverseid}})" />
+                <img ng-click="toDeck(card.multiverseid)" ng-src="{{showCard(card.multiverseid)}}" />
             </li>
         </ul>
     </div>
     <div id="deck-cards" ng-show="deck.cards">
         <ul class="results">
-            <li ng-repeat="card in deck.cards track by $index"><img ng-click="removeFromDeck($index)" ng-src="showCard({{card}})" class="search-card" /></li>
+            <li ng-repeat="card in deck.cards track by $index"><img ng-click="removeFromDeck($index)" ng-src="{{showCard(card)}}" class="search-card" /></li>
         </ul>
     </div>
 </div>
