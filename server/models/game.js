@@ -2,7 +2,6 @@ var angoose = require('angoose'),
     mongoose = angoose.getMongoose();
 
 var GameSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     host: {
         type: String,
         required: true

@@ -29,7 +29,7 @@
                     files: [
                         {
                             expand: true,
-                            cwd: 'lib/alv-ch-ng/dist/',
+                            cwd: 'lib/alv-ch-ng.core/dist/',
                             src: ['**/*'],
                             dest: 'public/lib/alv-ch-ng/'
                         },
@@ -37,7 +37,7 @@
                             expand: true,
                             cwd: 'lib/bootstrap/',
                             src: 'fonts/*',
-                            dest: 'public/lib/bootstrap/'
+                            dest: 'public/lib/alv-ch-ng/'
                         },
                         {
                             expand: true,
@@ -75,6 +75,7 @@
                             'lib/jqueryui-touch-punch/jquery.ui.touch-punch.js',
                             'lib/bootstrap/dist/js/bootstrap.js',
                             'lib/bootstrap-select/dist/js/bootstrap-select.js',
+                            'lib/bootstrap-datepicker/js/bootstrap-datepicker.js',
                             'lib/bootstrapaccessibilityplugin/plugins/js/bootstrap-accessibility.js',
                             'lib/angular/angular.js',
                             'lib/angular-resource/angular-resource.js',

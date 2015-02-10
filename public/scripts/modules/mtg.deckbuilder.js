@@ -3,12 +3,23 @@
 
     var module = angular.module('mtg.deckbuilder', ['mtg.variables','mtg.modals','restangular','ngLodash']);
 
-    module.controller('DeckBuilderCtrl', function ($scope,$rootScope,$http,MTGJson,lodash) {
+    module.controller('DeckBuilderCtrl', function ($scope,$rootScope,$http,MTGJson,lodash, Deck) {
         $scope.cards=null;
         $scope.searchCards=[];
-        $scope.deck={name:'Deck', cards: []};
+        $scope.deck=new Deck({ name: 'New Deck', username: $rootScope.globals.currentUser.username, cards: [] });
         $scope.parseDeck=false;
         $scope.selectedSet=false;
+
+        Deck.find({username: $scope.globals.currentUser.username}, function (err, result) {
+            /*
+             todo qbaka or track.js!
+             if (err) return console.error(err);
+             else console.log(result);
+             */
+            if (!err) {
+                $scope.deckList = result;
+            }
+        });
 
         $scope.setList=MTGJson.setList().getList().$object;
 
@@ -40,6 +51,23 @@
                         $scope.searchCards = lodash.compact($scope.searchCards.concat(cards));
                     }
                 });
+            });
+        };
+
+        $scope.chooseDeck=function(deck){
+            console.log(deck);
+        };
+
+        $scope.showCard=function(multiverseid){
+            if (multiverseid){
+                return 'http://mtgimage.com/multiverseid/' + multiverseid + '.jpg';
+            }
+            return '/images/card-back.jpeg';
+        };
+
+        $scope.saveDeck=function(){
+            $scope.deck.save(function(err, result){
+                console.log('SAVE',$scope.deck._id,err,result);
             });
         };
     });

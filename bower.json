@@ -38,7 +38,7 @@
     "ng-lodash":"latest",
     "restangular": "~1.4.0",
     "jquery": "2.1.1",
-    "alv-ch-ng":"~0.2.1",
+    "alv-ch-ng.core":"~0.2.0",
     "jquery-ui": "latest",
     "jqueryui-touch-punch":"latest",
     "lodash":"latest"

@@ -2,6 +2,9 @@
 <h1>lobby</h1>
 <strong>Hello {{ getCredentials().currentUser.username }}</strong>
 
+<button ng-click="testUser()">test user/pwd</button>
+<pre>{{ sampleUser }}</pre>
+
 <div class="well">
     <ul>
         <li ng-repeat="game in games"><a href="#/playground/{{game}}">{{game}}</a></li>

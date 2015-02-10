@@ -12,6 +12,7 @@
                 $scope.login = function () {
                     $scope.dataLoading = true;
                     AuthenticationService.Login($scope.username, $scope.password, function (response) {
+                        console.log('RESPONSE',response);
                         if (response.success) {
                             AuthenticationService.SetCredentials($scope.username, $scope.password);
                             socket.emit('user:login', $scope.username);
@@ -25,30 +26,29 @@
             }]);
 
     module.factory('AuthenticationService',
-        ['Base64', '$http', '$cookieStore', '$rootScope', '$timeout',
-            function (Base64, $http, $cookieStore, $rootScope, $timeout) {
+        ['Base64', '$http', '$cookieStore', '$rootScope', '$timeout','User',
+            function (Base64, $http, $cookieStore, $rootScope, $timeout, User) {
                 var service = {};
 
                 service.Login = function (username, password, callback) {
-
-                    /* Dummy authentication for testing, uses $timeout to simulate api call
-                     ----------------------------------------------*/
-                    $timeout(function () {
-                        var response = { success: username === 'test' || username === 'thomas' && password === 'test' };
-                        if (!response.success) {
-                            response.message = 'Username or password is incorrect';
+                    User.findOne({username: username}, function(err, currentUser){
+                        var response={success:false,message:''};
+                        if (!err){
+                            var authUser = new User(currentUser);
+                            currentUser.authenticate(password, function(err, result){
+                                response.success=result;
+                                if (!result) {
+                                    response.message='wrong password';
+                                    callback(response);
+                                }
+                                callback(response);
+                            });
                         }
-                        callback(response);
-                    }, 1000);
-
-
-                    /* Use this for real authentication
-                     ----------------------------------------------*/
-                    //$http.post('/api/authenticate', { username: username, password: password })
-                    //    .success(function (response) {
-                    //        callback(response);
-                    //    });
-
+                        else {
+                            response.message='no user';
+                            callback(response);
+                        }
+                    });
                 };
 
                 service.SetCredentials = function (username, password) {

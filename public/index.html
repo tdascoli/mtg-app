@@ -52,7 +52,7 @@
                         <span glyph-icon="stats"></span>
                     </button>
                     <!-- deck-builder -->
-                    <button show-startswith="/deck-builder" type="button" class="navbar-toggle navbar-btn navbar-playground" data-toggle="modal" data-target="#player-stats">
+                    <button show-startswith="/deck-builder" type="button" class="navbar-toggle navbar-btn navbar-playground" ng-click="saveDeck()">
                         <span glyph-icon="floppy-disk"></span>
                     </button>
                     <button show-startswith="/deck-builder" type="button" class="navbar-toggle navbar-btn navbar-playground" data-toggle="modal" data-target="#import-widget">
@@ -110,7 +110,6 @@
     <script src="/angoose/angoose-client.js"></script>
 
     <script src="lib/alv-ch-ng/alv-ch-ng.common.js"></script>
-    <script src="lib/alv-ch-ng/alv-ch-ng.translate.js"></script>
     <script src="lib/alv-ch-ng/alv-ch-ng.security.js"></script>
     <script src="lib/alv-ch-ng/alv-ch-ng.ui-core.js"></script>
     <script src="lib/alv-ch-ng/alv-ch-ng.ui-forms.js"></script>
@@ -118,7 +117,7 @@
     <script src="lib/alv-ch-ng/alv-ch-ng.ui-scroll.js"></script>
 
     <script src="scripts/app.js"></script>
-    <script src="scripts/modules/authentication.js"></script>
+    <script src="scripts/modules/mtg.auth.js"></script>
     <script src="scripts/modules/common.constants.js"></script>
     <script src="scripts/modules/mtg.main.js"></script>
     <script src="scripts/modules/mtg.playground.js"></script>

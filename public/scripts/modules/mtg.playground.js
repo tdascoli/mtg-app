@@ -11,11 +11,6 @@
         var $exile = {my:$('#my-exile'),op:$('#op-exile')};
         var side = 'my';
 
-        /*var room=prompt("choose room:");
-        socket.emit('switchRoom', room);
-
-        socket.emit('sendchat', 'test message');*/
-
         // join game
         if ($routeParams.game) {
             socket.emit('host:join', $routeParams.game);
