@@ -484,6 +484,13 @@
         }
     });
 
+    module.controller('LoadGameCtrl', function ($scope, $rootScope, $routeParams, Game) {
+        // load game
+        if ($routeParams.game) {
+            console.log($routeParams.game);
+        }
+    });
+
     module.factory('GameAreaService', ['zIndex', function (zIndex) {
 
         var myDummyCard = angular.element('<div class="card-min" data-drag="true" jqyoui-draggable data-jqyoui-options="{{dragCardOptions}}">' +

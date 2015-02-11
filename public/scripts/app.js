@@ -23,9 +23,10 @@
         'mtg.modals',
         'mtg.variables',
         'mtg.chat',
+        'mtg.auth',
+        'mtg.lobby',
         'btford.socket-io',
         'ngDragDrop',
-        'mtg.auth',
         'angoose.client'
     ];
 
@@ -49,10 +50,11 @@
                 // archive
                 {path: '/chat', templateUrl: '/pages/playground/chat.html', controller: 'ChatCtrl'},
                 // mtg
-                {path: '/lobby', templateUrl: '/pages/lobby/lobby.html'},
+                {path: '/lobby', templateUrl: '/pages/lobby/lobby.html', controller: 'LobbyCtrl'},
                 {path: '/deck-builder', templateUrl: '/pages/deck-builder/deck-builder.html', controller: 'DeckBuilderCtrl'},
                 {path: '/playground', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 {path: '/playground/:game', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
+                {path: '/playground/load/:game', templateUrl: '/pages/playground/playground.html', controller: 'LoadGameCtrl'},
                 // security
                 {path: '/login', templateUrl: '/pages/common/login.html', controller: 'LoginCtrl'},
                 {path: '/signup', templateUrl: '/pages/common/signup.html', controller: 'SignupCtrl'}

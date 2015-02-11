@@ -98,7 +98,7 @@
             link: function (scope, element, attrs) {
                 scope.$on('$routeChangeSuccess', function () {
                     element.removeClass('active');
-                    var patterns = attrs.showStartswith.split('|');
+                    var patterns = attrs.hideStartswith.split('|');
                     for (var i = 0; i < patterns.length; i++) {
                         var pattern = patterns[i];
                         if ($location.path().indexOf(pattern) > -1) {
