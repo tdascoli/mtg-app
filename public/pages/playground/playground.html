@@ -23,7 +23,7 @@
         </ul>
     </div>
 </div>
-<div mtg-playground id="game-area" class="content game-area" ng-swipe-left="nextPhase()">
+<div mtg-playground id="game-area" class="content game-area"> <!--  ng-swipe-left="nextPhase()" -->
     <div id="op-game-area">
         <div id="op-handlogic" class="handlogic">
             <div id="op-exile" class="exile">ex</div>
@@ -37,20 +37,22 @@
         </div>
         <div mtg-battlefield data-hitpoints="{{op.hitpoints}}" id="op-battlefield" class="battlefield"></div>
     </div>
-    <div id="phase" class="phase">
+    <div id="phase" class="phase small">
+        <!--
         <span ng-class="{active:phase.begin}" ng-click="setPhase('begin')">Begin</span>
         <span ng-class="{active:phase.main1}" ng-click="setPhase('main1')">Main</span>
         <span ng-class="{active:phase.combat}" ng-click="setPhase('combat')">Combat</span>
         <span ng-class="{active:phase.main2}" ng-click="setPhase('main2')">Main</span>
         <span ng-class="{active:phase.end}" ng-click="setPhase('end')">End</span>
+        -->
     </div>
     <div id="my-game-area">
         <div mtg-battlefield data-hitpoints="{{my.hitpoints}}" id="my-battlefield" class="battlefield" jqyoui-droppable="{onDrop:'toBattlefield'}" data-jqyoui-options="{activeClass:'tapped'}" data-drop="true" ng-model="my.battlefield"></div>
         <div id="my-handlogic" class="handlogic">
             <div id="my-exile" class="exile" jqyoui-droppable="{onDrop:'toExile'}" data-drop="true">ex</div>
             <div id="my-graveyard" class="graveyard" jqyoui-droppable="{onDrop:'toGraveyard'}" data-drop="true">gr</div>
-            <div id="my-library" class="library" jqyoui-droppable="{onDrop:'toLibrary'}" data-drop="true" ng-click="drawCard(false,'my')">
-                <div class="my card-min card-dummy">
+            <div id="my-library" class="library" jqyoui-droppable="{onDrop:'toLibrary'}" data-drop="true">
+                <div class="my card-min card-dummy" ng-show="my.library.length" ng-click="drawCard(false,'my')">
                     <img src="/images/card-back.jpeg" />
                 </div>
             </div>
@@ -58,8 +60,12 @@
         </div>
     </div>
 </div>
+
+<button ng-click="saveGame()">save game</button>
+
 <ng-include src="'/pages/playground/search-cards.html'"></ng-include>
 <ng-include src="'/pages/playground/card-context.html'"></ng-include>
 <ng-include src="'/pages/playground/chat-widget.html'"></ng-include>
 <ng-include src="'/pages/playground/library-widget.html'"></ng-include>
 <ng-include src="'/pages/playground/player-stats.html'"></ng-include>
+<ng-include src="'/pages/playground/choose-deck.html'"></ng-include>

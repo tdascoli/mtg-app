@@ -2,7 +2,6 @@ module.exports = function (io) {
     'use strict';
 
     var usernames = {};
-    var games = [];
 
     io.on('connection', function (socket) {
 
@@ -27,17 +26,13 @@ module.exports = function (io) {
             socket.emit('mtg:update', 'SERVER', socket.username+' host this game: '+name);
             // define game (room)
             socket.game=name;
-            // add game
-            games[name]=name;
-            socket.broadcast.emit('host:update', games, socket.game);
+            socket.broadcast.emit('host:update', socket.game, socket.username);
         });
 
         socket.on('host:debug', function(name){
             socket.emit('mtg:update', 'SERVER', socket.username+' host a debug game: '+name);
             // define game (room)
             socket.game=name;
-            // add game
-            games[name]=name;
         });
 
         socket.on('host:join', function(game){
@@ -47,6 +42,7 @@ module.exports = function (io) {
 
         function joinGame(game,username){
             socket.join(game);
+            io.sockets.in(game).emit('host:joined', username);
             socket.emit('mtg:update', 'SERVER', username+' has connected to '+ game);
         }
 
@@ -64,7 +60,7 @@ module.exports = function (io) {
 
         // when the user disconnects.. perform this
         socket.on('disconnect', function(){
-            // todo: inform opponent, save in db?!
+            // todo: inform opponent, flush game list?!, save in db?!
 
             // remove the username from global usernames list
             delete usernames[socket.username];
@@ -72,7 +68,8 @@ module.exports = function (io) {
             io.sockets.emit('user:update', usernames);
             // echo globally that this client has left
             socket.broadcast.emit('mtg:update', 'SERVER', socket.username + ' has disconnected');
-            socket.leave(socket.room);
+            io.sockets.in(socket.game).emit('host:save', socket.username);
+            socket.leave(socket.game);
         });
     });
 };

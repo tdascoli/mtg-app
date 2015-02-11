@@ -3,12 +3,24 @@
 
     var module = angular.module('mtg.modals', ['ngLodash']);
 
-    module.controller('GameModalCtrl', function ($scope,$compile,lodash,GameAreaService) {
+    module.controller('GameModalCtrl', function ($scope,$compile,lodash,GameAreaService,Deck) {
 
         $scope.amountCards=0;
         $scope.showCards=false;
         $scope.selectedCards=[];
         $scope.removeCards=[];
+        $scope.deck=[];
+
+        Deck.find({username: $scope.globals.currentUser.username}, function (err, result) {
+            /*
+             todo qbaka or track.js!
+             if (err) return console.error(err);
+             else console.log(result);
+             */
+            if (!err) {
+                $scope.deckList = result;
+            }
+        });
 
         $scope.tapModal=function(){
             GameAreaService.tap($('#card-widget-mobile').attr('card'), $('#card-widget-mobile').attr('side'));
@@ -141,6 +153,11 @@
             }
             GameAreaService.removeCard($('#library-widget').attr('number'),'my');
             $('#library-widget').modal('hide');
+        };
+
+        $scope.choosePlayDeck=function(){
+            $scope.my.library=$scope.deck;
+            $('#choose-play-deck').removeClass('show');
         };
     });
 

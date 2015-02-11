@@ -3,18 +3,30 @@
 
     var module = angular.module('mtg.main', ['mtg.chat','mtg.directives','mtg.modals','mtg.playground','mtg.deckbuilder','mtg.socket','mtg.variables','mtg.auth']);
 
-    module.controller('MtgMainCtrl', function ($scope,$rootScope,$location,socket,AuthenticationService,User) {
+    module.controller('MtgMainCtrl', function ($scope,$rootScope,$location,socket,AuthenticationService,Game) {
 
         $rootScope.countMessage=0;
-
-        $scope.game='';
+        $rootScope.player1=false;
+        $scope.gameName='';
         $scope.games=[];
+
+        Game.find({ $or:[{player1: $scope.globals.currentUser.username},{player2: $scope.globals.currentUser.username}]}, function (err, result) {
+            /*
+             todo qbaka or track.js!
+             if (err) return console.error(err);
+             else console.log(result);
+             */
+            if (!err) {
+                $scope.savedGames=result;
+            }
+        });
 
         $rootScope.debug=false;
 
         $scope.hostGame=function(){
-            socket.emit('host', $scope.game);
-            $location.path('/playground/'+$scope.game);
+            $rootScope.player1=$scope.globals.currentUser.username;
+            socket.emit('host', $scope.gameName);
+            $location.path('/playground/'+$scope.gameName);
         };
 
         $scope.debugGame=function(){
@@ -24,9 +36,9 @@
         };
 
 
-        socket.on('host:update', function (games, newgame) {
-            console.log(games, newgame);
-            $scope.games.push(newgame);
+        socket.on('host:update', function (newgame, player1) {
+            console.log(player1, newgame);
+            $scope.games.push({name:newgame,player1:player1});
         });
 
         $scope.getCredentials=function(){

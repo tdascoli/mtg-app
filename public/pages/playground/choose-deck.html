@@ -1,0 +1,12 @@
+<div class="modal fade in show" id="choose-play-deck" ng-controller="GameModalCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <select form-input name="deck" id="deck" ng-model="deck" ng-options="item.cards as item.name for item in deckList"></select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-sm btn-primary" ng-click="choosePlayDeck()">Choose</button>
+            </div>
+        </div>
+    </div>
+</div>

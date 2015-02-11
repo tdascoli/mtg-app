@@ -3,7 +3,7 @@
 
     var module = angular.module('mtg.playground', ['mtg.variables','mtg.socket','ngLodash']);
 
-    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, $routeParams, socket, lodash, currentCard, GameAreaService) {
+    module.controller('GameAreaCtrl', function ($compile, $scope, $rootScope, $routeParams, socket, lodash, currentCard, GameAreaService, Game) {
         var $game = $('#game-area');
         var $library = {my:$('#my-library'),op:$('#op-library')};
         var $hand = {my:$('#my-hand'),op:$('#op-hand')};
@@ -14,8 +14,13 @@
         // join game
         if ($routeParams.game) {
             socket.emit('host:join', $routeParams.game);
+            if (!$rootScope.player1){
+                $rootScope.player1=$scope.globals.currentUser.username;
+            }
+            else {
+                $rootScope.player2=$scope.globals.currentUser.username;
+            }
         }
-
         $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
         $rootScope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
 
@@ -28,139 +33,80 @@
         $rootScope.my = {
             hitpoints: 20,
             infection: 0,
-            cards: [
-                370490,
-                370490,
-                370490,
-                370490,
-                380194,
-                380194,
-                380194,
-                380194,
-                202429,
-                376453,
-                376453,
-                376453,
-                202433,
-                202433,
-                202433,
-                202424,
-                202424,
-                202424,
-                202424,
-                202442,
-                202442,
-                600,
-                83058,
-                83058,
-                275705,
-                159307,
-                629,
-                630,
-                631,
-                632,
-                633,
-                376508,
-                159308,
-                159308,
-                692,
-                202437,
-                202437,
-                201156,
-                201156,
-                201156,
-                201156,
-                202447,
-                202447,
-                201162,
-                201162,
-                201162,
-                201162,
-                373334,
-                373334,
-                373334,
-                373334,
-                202628,
-                159828,
-                202409,
-                729,
-                728,
-                201161,
-                373408,
-                5863,
-                5863
-            ]
+            cards: []
         };
-        $rootScope.op = { hitpoints: 20, infection: 0,
-            library: [
-            370490,
-            370490,
-            370490,
-            370490,
-            380194,
-            380194,
-            380194,
-            380194,
-            202429,
-            376453,
-            376453,
-            376453,
-            202433,
-            202433,
-            202433,
-            202424,
-            202424,
-            202424,
-            202424,
-            202442,
-            202442,
-            600,
-            83058,
-            83058,
-            275705,
-            159307,
-            629,
-            630,
-            631,
-            632,
-            633,
-            376508,
-            159308,
-            159308,
-            692,
-            202437,
-            202437,
-            201156,
-            201156,
-            201156,
-            201156,
-            202447,
-            202447,
-            201162,
-            201162,
-            201162,
-            201162,
-            373334,
-            373334,
-            373334,
-            373334,
-            202628,
-            159828,
-            202409,
-            729,
-            728,
-            201161,
-            373408,
-            5863,
-            5863
-        ] };
+        /*
+         cards: [
+         370490,
+         370490,
+         370490,
+         370490,
+         380194,
+         380194,
+         380194,
+         380194,
+         202429,
+         376453,
+         376453,
+         376453,
+         202433,
+         202433,
+         202433,
+         202424,
+         202424,
+         202424,
+         202424,
+         202442,
+         202442,
+         600,
+         83058,
+         83058,
+         275705,
+         159307,
+         629,
+         630,
+         631,
+         632,
+         633,
+         376508,
+         159308,
+         159308,
+         692,
+         202437,
+         202437,
+         201156,
+         201156,
+         201156,
+         201156,
+         202447,
+         202447,
+         201162,
+         201162,
+         201162,
+         201162,
+         373334,
+         373334,
+         373334,
+         373334,
+         202628,
+         159828,
+         202409,
+         729,
+         728,
+         201161,
+         373408,
+         5863,
+         5863
+         ]
+         */
+        $rootScope.op = { hitpoints: 20, infection: 0, cards: [] };
 
         $scope.isHandConcealed=true;
         $scope.dragCardOptions = {containment: '#game-area' ,grid: [10, 10], snap: '.exile,.graveyard,.library,.hand,.battlefield',snapTolerance: 10};
 
         $scope.toBattlefield = function (event, ui) {
             console.log('toBattlefield');
-            GameAreaService.cardIn(ui.draggable, 'battlefield');
+            $scope.cardIn('my',ui.draggable, 'battlefield');
             //ui.draggable.find('.flipped').removeClass('flipped');
             $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'battlefield');
 
@@ -169,14 +115,14 @@
 
         $scope.toHand = function (event, ui) {
             console.log('toHand');
-            GameAreaService.cardIn(ui.draggable, 'hand');
+            $scope.cardIn('my',ui.draggable, 'hand');
             $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'hand');
             $scope.reorganize(side);
         };
 
         $scope.toGraveyard = function (event, ui) {
             console.log('toGraveyard');
-            GameAreaService.cardIn(ui.draggable, 'graveyard');
+            $scope.cardIn('my',ui.draggable, 'graveyard');
             GameAreaService.placeIn(ui.draggable, $('#my-graveyard').offset());
             $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'graveyard');
             $scope.reorganize(side);
@@ -184,7 +130,7 @@
 
         $scope.toExile = function (event, ui) {
             console.log('toExile');
-            GameAreaService.cardIn(ui.draggable, 'exile');
+            $scope.cardIn('my',ui.draggable, 'exile');
             GameAreaService.placeIn(ui.draggable, $('#my-exile').offset());
             $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'exile');
             $scope.reorganize(side);
@@ -197,12 +143,24 @@
             $scope.reorganize(side);
         };
 
+        $scope.cardIn=function(side,$card,where){
+            if (side==='my'){
+                GameAreaService.cardIn($card, where);
+            }
+
+            var card={in:where,offset: { top:$card.css('top'), left:$card.css('left') },number:$card.attr('number'),multiverseid:$card.attr('multiverseid'),counter:($card.hasClass('has-token') ? $card.attr('data-token') : 0),zIndex:$card.css('zIndex'),tapped:$card.hasClass('tapped')};
+            console.log('cardIn',card);
+            if (side==='my'){
+                $rootScope.my.cards.push(card);
+            }
+            else {
+                $rootScope.op.cards.push(card);
+            }
+        };
+
         $scope.shuffleLibrary = function (sidebar) {
             if (sidebar){
                 GameAreaService.closeSidebar();
-            }
-            if ($rootScope.my.library === undefined) {
-                $rootScope.my.library=$rootScope.my.cards;
             }
             GameAreaService.shuffleArray($rootScope.my.library);
         };
@@ -261,6 +219,14 @@
             });
         };
 
+        $scope.saveGame=function(){
+            var game = saveGame($rootScope.globals.currentUser.username);
+            console.log(game);
+            game.save(function(err,result){
+                console.log('SAVE GAME',game._id,err,result);
+            });
+        };
+
         $scope.drawFullHand=function(){
             for(var i=0;i<7;i++){
                 $scope.drawCard(false,'my');
@@ -282,6 +248,8 @@
 
             $compile($card)($scope);
             $game.append($card);
+            $scope.cardIn('my',$card, 'hand');
+
 
             $scope.sendDrawCard($card);
 
@@ -330,7 +298,6 @@
                 else if (points==='gain'){
                     $rootScope.my.hitpoints++;
                 }
-                //$('#my-battlefield').attr('data-hitpoints',$rootScope.my.hitpoints);
             }
             else {
                 if (points==='lose'){
@@ -354,7 +321,6 @@
                 else if (points==='gain'){
                     $rootScope.op.hitpoints++;
                 }
-                //$('#my-battlefield').attr('data-hitpoints',$rootScope.op.hitpoints);
             }
             else {
                 if (points==='lose'){
@@ -392,6 +358,7 @@
                     });
                     //$('#op_'+data.offset.id+' img.front-side').removeClass('flipped');
                 }
+                $scope.cardIn('op',$('#op_' + data.offset.id), data.offset.where);
                 $scope.reorganize('op');
             }
         });
@@ -404,6 +371,7 @@
                     var $card = GameAreaService.drawCard(data.appendix.multiverseid, 'op', data.appendix.id);
                     $compile($card)($scope);
                     $game.append($card);
+                    $scope.cardIn('op',$card, 'hand');
                     $scope.reorganize('op');
                 }
                 if (data.action === 'tap') {
@@ -422,6 +390,23 @@
                     $rootScope.op.library = data.appendix.library;
                     GameAreaService.removeCard(data.appendix.id, 'op')
                 }
+            }
+        });
+
+        socket.on('host:save', function (user) {
+            console.log('host:save',user,'has disconnected');
+            var game = saveGame(user);
+            console.log(game);
+            // todo collect data and store, show message etc...
+            // todo --> refresh?!
+            game.save(function(err,result){
+                console.log('SAVE GAME',game._id,err,result);
+            });
+        });
+
+        socket.on('host:joined', function(user){
+            if (user!==$rootScope.globals.currentUser.username) {
+                $rootScope.player2 = user;
             }
         });
 
@@ -482,6 +467,21 @@
             };
             socket.emit('playground:action', { action: 'toLibrary', user: $rootScope.globals.currentUser.username, appendix: appendix });
         };
+
+        // game
+        function saveGame(user){
+            // when player1 unknown
+            if (!$rootScope.player1){
+                $rootScope.player1=user;
+            }
+            return new Game({
+                player1: ($rootScope.player1),
+                player2: ($rootScope.player2),
+                name: $routeParams.game,
+                player1Stats: ($rootScope.player1===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op),
+                player2Stats: ($rootScope.player2===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op)
+            });
+        }
     });
 
     module.factory('GameAreaService', ['zIndex', function (zIndex) {
@@ -507,6 +507,8 @@
             $card.removeClass('in-exile').removeClass('in-graveyard').removeClass('in-library').removeClass('in-hand').removeClass('in-battlefield');
             if (where !== 'battlefield') {
                 $card.removeClass('tapped');
+                $card.removeClass('has-token');
+                $card.attr('data-token',0);
             }
             $card.addClass('in-' + where);
         }

@@ -21,7 +21,7 @@ app.configure(function() {
 
 var options = {
     'module-dirs':  './server/models',
-    logging:'TRACE',
+    //logging:'TRACE',
     mongo_opts:'localhost:27017/mtg-app'
 };
 require("angoose").init(app, options);

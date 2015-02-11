@@ -2,11 +2,11 @@ var angoose = require('angoose'),
     mongoose = angoose.getMongoose();
 
 var GameSchema = mongoose.Schema({
-    host: {
+    player1: {
         type: String,
         required: true
     },
-    opponent: {
+    player2: {
         type: String,
         required: true
     },
@@ -14,40 +14,38 @@ var GameSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    hostStats: {
+    player1Stats: {
         hitpoints: Number,
         infection: Number,
         library: [Number],
-        hand: [Number],
-        graveyard: [Number],
-        exile: [Number],
-        battlefield: [{
+        cards: [{
             offset: {
-                top: Number,
-                left: Number
+                top: String,
+                left: String
             },
+            number: Number,
             zIndex: Number,
             multiverseid: Number,
             counter: Number,
-            tapped: Boolean
+            tapped: Boolean,
+            in: String
         }]
     },
-    opponentStats: {
+    player2Stats: {
         hitpoints: Number,
         infection: Number,
         library: [Number],
-        hand: [Number],
-        graveyard: [Number],
-        exile: [Number],
-        battlefield: [{
+        cards: [{
             offset: {
-                top: Number,
-                left: Number
+                top: String,
+                left: String
             },
+            number: Number,
             zIndex: Number,
             multiverseid: Number,
             counter: Number,
-            tapped: Boolean
+            tapped: Boolean,
+            in: String
         }]
     },
     date: { type: Date, default: Date.now }
