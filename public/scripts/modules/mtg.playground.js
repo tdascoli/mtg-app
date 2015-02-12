@@ -390,7 +390,6 @@
         socket.on('host:save', function (user) {
             console.log('host:save',user,'has disconnected');
             var game = saveGame(user);
-            console.log(game);
             // todo collect data and store, show message etc...
             // todo --> refresh?!
             game.save(function(err,result){
@@ -520,6 +519,9 @@
                     if (card.in!=='hand'){
                         GameAreaService.placeIn($card,$('#'+side+'-'+card.in).offset());
                     }
+                }
+                if (card.tapped){
+                    $card.addClass('tapped');
                 }
                 $compile($card)($scope);
                 $game.append($card);
