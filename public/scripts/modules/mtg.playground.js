@@ -526,6 +526,9 @@
                 $compile($card)($scope);
                 $game.append($card);
 
+                if (card.counter>0){
+                    GameAreaService.setToken(card.number,side,card.counter);
+                }
                 GameAreaService.cardIn($card,card.in);
                 GameAreaService.updateZ($card);
             });
