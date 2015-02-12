@@ -54,7 +54,7 @@
                 {path: '/deck-builder', templateUrl: '/pages/deck-builder/deck-builder.html', controller: 'DeckBuilderCtrl'},
                 {path: '/playground', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 {path: '/playground/:game', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
-                {path: '/playground/load/:game', templateUrl: '/pages/playground/playground.html', controller: 'LoadGameCtrl'},
+                {path: '/playground/load/:id', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 // security
                 {path: '/login', templateUrl: '/pages/common/login.html', controller: 'LoginCtrl'},
                 {path: '/signup', templateUrl: '/pages/common/signup.html', controller: 'SignupCtrl'}

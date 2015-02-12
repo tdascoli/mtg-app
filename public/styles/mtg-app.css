@@ -196,6 +196,18 @@ button.playgroundnav {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+.mtg-dialog {
+  padding-top: 50px;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
 .card-min {
   width: 40px;
   height: 55px;

@@ -157,7 +157,7 @@
 
         $scope.choosePlayDeck=function(){
             $scope.my.library=$scope.deck;
-            $('#choose-play-deck').removeClass('show');
+            $scope.initShow=false;
         };
     });
 

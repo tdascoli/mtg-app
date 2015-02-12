@@ -11,16 +11,6 @@
         var $exile = {my:$('#my-exile'),op:$('#op-exile')};
         var side = 'my';
 
-        // join game
-        if ($routeParams.game) {
-            socket.emit('host:join', $routeParams.game);
-            if (!$rootScope.player1){
-                $rootScope.player1=$scope.globals.currentUser.username;
-            }
-            else {
-                $rootScope.player2=$scope.globals.currentUser.username;
-            }
-        }
         $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
         $rootScope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
 
@@ -151,10 +141,10 @@
             var card={in:where,offset: { top:$card.css('top'), left:$card.css('left') },number:$card.attr('number'),multiverseid:$card.attr('multiverseid'),counter:($card.hasClass('has-token') ? $card.attr('data-token') : 0),zIndex:$card.css('zIndex'),tapped:$card.hasClass('tapped')};
             console.log('cardIn',card);
             if (side==='my'){
-                $rootScope.my.cards.push(card);
+                $rootScope.my.cards[$card.attr('number')]=card;
             }
             else {
-                $rootScope.op.cards.push(card);
+                $rootScope.op.cards[$card.attr('number')]=card;
             }
         };
 
@@ -167,7 +157,7 @@
 
         $scope.cardAction = function (id, side, multiverseid) {
             if ($.browser.mobile) {
-                if (side==='my' || (side==='op' && $game.hasClass('reveal-hand'))){
+                if (side==='my' || (side==='op' && ($game.hasClass('reveal-hand') || !$('#op_'+id).hasClass('in-hand')))){
                     GameAreaService.cardContextMobile(id, side, multiverseid);
                 }
             }
@@ -242,9 +232,9 @@
                 multiverseid = $rootScope.my.library[0];
                 $rootScope.my.library.splice(0, 1);
             }
-            currentCard++;
 
             var $card=GameAreaService.drawCard(multiverseid,side,currentCard);
+            currentCard++;
 
             $compile($card)($scope);
             $game.append($card);
@@ -468,7 +458,69 @@
             socket.emit('playground:action', { action: 'toLibrary', user: $rootScope.globals.currentUser.username, appendix: appendix });
         };
 
-        // game
+        // load or host game
+        $scope.initShow=false;
+        $scope.init=function(){
+            $scope.initShow=true;
+        };
+
+        // join game
+        if ($routeParams.game) {
+            console.log('HOST GAME');
+            $scope.initShow=true;
+
+            socket.emit('host:join', $routeParams.game);
+            if (!$rootScope.player1){
+                $rootScope.player1=$scope.globals.currentUser.username;
+            }
+            else {
+                $rootScope.player2=$scope.globals.currentUser.username;
+            }
+        }
+
+        // load game
+        if ($routeParams.id) {
+            Game.findOne({_id:$routeParams.id}, function(err,result){
+                var game = result;
+
+                $rootScope.player1=game.player1;
+                $rootScope.player2=game.player2;
+
+                if (game.player1===$scope.globals.currentUser.username){
+                    $rootScope.my=game.player1Stats;
+                    $rootScope.op=game.player2Stats;
+                }
+                else {
+                    $rootScope.my=game.player2Stats;
+                    $rootScope.op=game.player1Stats;
+                }
+                // place cards in game-area
+                loadGameCards($rootScope.my.cards,'my');
+                loadGameCards($rootScope.op.cards,'op');
+
+                $scope.reorganize('my');
+                $scope.reorganize('op');
+            });
+        }
+
+        function loadGameCards(cards,side){
+            angular.forEach(cards, function(card){
+                var $card;
+                if (card.in!=='hand'){
+                    $card=GameAreaService.getNewCardElement(card.multiverseid,side,card.number);
+                    GameAreaService.placeIn($card,card.offset);
+                }
+                else {
+                    $card=GameAreaService.drawCard(card.multiverseid,side,card.number);
+                }
+                $compile($card)($scope);
+                $game.append($card);
+
+                GameAreaService.cardIn($card,card.in);
+                GameAreaService.updateZ($card);
+            });
+        }
+
         function saveGame(user){
             // when player1 unknown
             if (!$rootScope.player1){
@@ -484,19 +536,12 @@
         }
     });
 
-    module.controller('LoadGameCtrl', function ($scope, $rootScope, $routeParams, Game) {
-        // load game
-        if ($routeParams.game) {
-            console.log($routeParams.game);
-        }
-    });
-
     module.factory('GameAreaService', ['zIndex', function (zIndex) {
 
-        var myDummyCard = angular.element('<div class="card-min" data-drag="true" jqyoui-draggable data-jqyoui-options="{{dragCardOptions}}">' +
+        var myDummyCard = angular.element('<div class="my card-min" data-drag="true" jqyoui-draggable data-jqyoui-options="{{dragCardOptions}}">' +
                                             '<img src="/images/card-back.jpeg" class="back-side"/>' +
                                           '</div>');
-        var opDummyCard = angular.element('<div class="card-min">' +
+        var opDummyCard = angular.element('<div class="op card-min">' +
                                             '<img src="/images/card-back.jpeg" class="back-side"/>' +
                                           '</div>');
 
@@ -517,11 +562,10 @@
                 $card.removeClass('has-token');
                 $card.attr('data-token',0);
             }
-            $card.addClass('in-' + where);
+            $card.addClass('in-'+where);
         }
 
         function placeIn($card, offset) {
-            console.log($card,offset);
             $card.animate({
                 left: offset.left,
                 top: offset.top
