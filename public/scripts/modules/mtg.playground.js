@@ -99,7 +99,6 @@
             $scope.cardIn('my',ui.draggable, 'battlefield');
             //ui.draggable.find('.flipped').removeClass('flipped');
             $scope.sendDragCard(ui.draggable,ui.offset,ui.position,'battlefield');
-
             $scope.reorganize(side);
         };
 
@@ -460,10 +459,6 @@
 
         // load or host game
         $scope.initShow=false;
-        $scope.init=function(){
-            $scope.initShow=true;
-        };
-
         // join game
         if ($routeParams.game) {
             console.log('HOST GAME');
@@ -506,12 +501,15 @@
         function loadGameCards(cards,side){
             angular.forEach(cards, function(card){
                 var $card;
-                if (card.in!=='hand'){
+                if (card.in==='battlefield'){
                     $card=GameAreaService.getNewCardElement(card.multiverseid,side,card.number);
                     GameAreaService.placeIn($card,card.offset);
                 }
                 else {
                     $card=GameAreaService.drawCard(card.multiverseid,side,card.number);
+                    if (card.in!=='hand'){
+                        GameAreaService.placeIn($card,$('#'+side+'-'+card.in).offset());
+                    }
                 }
                 $compile($card)($scope);
                 $game.append($card);
