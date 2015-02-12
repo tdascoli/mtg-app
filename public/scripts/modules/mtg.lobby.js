@@ -8,7 +8,6 @@
         $rootScope.countMessage=0;
         $rootScope.player1=false;
         $rootScope.player2=false;
-        $rootScope.debug=false;
         $scope.gameName='';
         $scope.games=[];
 
@@ -35,8 +34,7 @@
 
         $rootScope.debugGame=function(){
             socket.emit('host:debug', 'debug-'+$rootScope.globals.currentUser.username);
-            $rootScope.debug=true;
-            $location.path('/playground/debug-'+$rootScope.globals.currentUser.username);
+            $location.path('/playground/debug/debug-'+$rootScope.globals.currentUser.username);
         };
 
         socket.on('host:update', function (newgame, player1) {

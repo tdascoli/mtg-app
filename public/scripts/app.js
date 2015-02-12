@@ -55,6 +55,7 @@
                 {path: '/playground', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 {path: '/playground/:game', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 {path: '/playground/load/:id', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
+                {path: '/playground/debug/:debug', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 // security
                 {path: '/login', templateUrl: '/pages/common/login.html', controller: 'LoginCtrl'},
                 {path: '/signup', templateUrl: '/pages/common/signup.html', controller: 'SignupCtrl'}

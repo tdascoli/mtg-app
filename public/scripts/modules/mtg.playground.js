@@ -14,6 +14,8 @@
         $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
         $rootScope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
 
+        $rootScope.debug=false;
+
         var card = {baseOffset: 40};
         /*if ($.browser.mobile) {
          card.baseOffset = 38; // mobile card width
@@ -137,7 +139,7 @@
                 GameAreaService.cardIn($card, where);
             }
 
-            var card={in:where,offset: { top:$card.css('top'), left:$card.css('left') },number:$card.attr('number'),multiverseid:$card.attr('multiverseid'),counter:($card.hasClass('has-token') ? $card.attr('data-token') : 0),zIndex:$card.css('zIndex'),tapped:$card.hasClass('tapped')};
+            var card={in:where,offset:{ top: GameAreaService.getFluidTop($card.offset().top), left: GameAreaService.getFluidLeft($card.offset().left) },number:$card.attr('number'),multiverseid:$card.attr('multiverseid'),counter:($card.hasClass('has-token') ? $card.attr('data-token') : 0),zIndex:$card.css('zIndex'),tapped:$card.hasClass('tapped')};
             console.log('cardIn',card);
             if (side==='my'){
                 $rootScope.my.cards[$card.attr('number')]=card;
@@ -327,9 +329,12 @@
         socket.on('playground:drag', function (data) {
             console.log('playground:drag',data,data.offset);
             if (data.user!==$rootScope.globals.currentUser.username || $scope.debug) {
+
+                var offset = convertOffset(true,{top:data.offset.fluidTop,left:data.offset.fluidLeft});
+
                 if (data.offset.where !== 'battlefield') {
                     GameAreaService.cardIn($('#op_' + data.offset.id), data.offset.where);
-                    var offset = $graveyard.op;
+                    offset = $graveyard.op;
                     if (data.offset.where === 'hand') {
                         offset = $hand.op;
                     }
@@ -342,8 +347,8 @@
                     GameAreaService.cardIn($('#op_' + data.offset.id), data.offset.where);
                     $('#op_' + data.offset.id).css({
                         zIndex: data.offset.zIndex,
-                        left: data.offset.left,
-                        top: (data.offset.top / 2)
+                        left: offset.left,
+                        top: offset.top
                     });
                     //$('#op_'+data.offset.id+' img.front-side').removeClass('flipped');
                 }
@@ -407,8 +412,8 @@
                 top: offset.top,
                 posLeft: position.left,
                 posTop: position.top,
-                //fluidLeft: playground.helpers.getFluidLeft(ui.position.left),
-                //fluidTop: playground.helpers.getFluidTop(ui.position.top),
+                fluidLeft: GameAreaService.getFluidLeft(offset.left),
+                fluidTop: GameAreaService.getFluidTop(offset.top),
                 zIndex: $card.css('z-index'),
                 id: $card.attr('number'),
                 where: where
@@ -460,11 +465,16 @@
         // load or host game
         $scope.initShow=false;
         // join game
-        if ($routeParams.game) {
-            console.log('HOST GAME');
+        if ($routeParams.game || $routeParams.debug) {
+            var game = $routeParams.game;
+            // debug
+            if ($routeParams.debug) {
+                $rootScope.debug=true;
+                game = $routeParams.debug;
+            }
             $scope.initShow=true;
 
-            socket.emit('host:join', $routeParams.game);
+            socket.emit('host:join', game);
             if (!$rootScope.player1){
                 $rootScope.player1=$scope.globals.currentUser.username;
             }
@@ -503,7 +513,7 @@
                 var $card;
                 if (card.in==='battlefield'){
                     $card=GameAreaService.getNewCardElement(card.multiverseid,side,card.number);
-                    GameAreaService.placeIn($card,card.offset);
+                    GameAreaService.placeIn($card,convertOffset((side==='op'),card.offset));
                 }
                 else {
                     $card=GameAreaService.drawCard(card.multiverseid,side,card.number);
@@ -525,12 +535,20 @@
                 $rootScope.player1=user;
             }
             return new Game({
-                player1: ($rootScope.player1),
-                player2: ($rootScope.player2),
+                player1: $rootScope.player1,
+                player2: $rootScope.player2,
+                saved: user,
                 name: $routeParams.game,
                 player1Stats: ($rootScope.player1===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op),
                 player2Stats: ($rootScope.player2===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op)
             });
+        }
+
+        function convertOffset(op,offset){
+            return {
+                    top:GameAreaService.convertFluidTop(offset.top,55,op),
+                    left:GameAreaService.convertFluidLeft(offset.left,48)
+                  };
         }
     });
 
@@ -545,6 +563,7 @@
 
         var library = {my:$('#my-library'),op:$('#op-library')};
         var hand = {my:$('#my-hand'),op:$('#op-hand')};
+        var game = $('#game-area');
 
         function cardContextMobile(id,side,multiverseid) {
             $('#card-widget-mobile').attr('card', id);
@@ -663,6 +682,39 @@
             $('#'+side+'_'+id).remove();
         }
 
+        // getFluidHeight
+        function getFluidTop(top){
+            var height=game.height();
+            return Math.round(100 * (top / height));
+        }
+
+        // getFluidWidth
+        function getFluidLeft(left){
+            var width=game.width();
+            return Math.round(100 * (left / width));
+        }
+
+        function convertFluidTop(fluidTop,cardHeight,op){
+            var top=(100-fluidTop)/100;
+            if (!op){
+                top=fluidTop/100;
+            }
+            top = Math.round((top * game.height())+(cardHeight-$('#phase').height()));
+            if (top>(game.height()-cardHeight)){
+                return (game.height()-cardHeight);
+            }
+            return top;
+        }
+
+        function convertFluidLeft(fluidLeft,cardWidth){
+            var left=fluidLeft/100;
+            left = Math.round(left * game.width());
+            if (left>(game.width()-cardWidth)){
+                return (game.width()-cardWidth);
+            }
+            return left;
+        }
+
         return {
             'cardContextMobile': cardContextMobile,
             'cardIn': cardIn,
@@ -678,7 +730,11 @@
             'handTop':handTop,
             'setToken':setToken,
             'removeCard':removeCard,
-            'putInLibrary':putInLibrary
+            'putInLibrary':putInLibrary,
+            'getFluidTop':getFluidTop,
+            'getFluidLeft':getFluidLeft,
+            'convertFluidTop':convertFluidTop,
+            'convertFluidLeft':convertFluidLeft
         };
     }]);
 

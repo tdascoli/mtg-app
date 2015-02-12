@@ -14,14 +14,18 @@ var GameSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    saved: {
+        type: String,
+        required: true
+    },
     player1Stats: {
         hitpoints: Number,
         infection: Number,
         library: [Number],
         cards: [{
             offset: {
-                top: String,
-                left: String
+                top: Number,
+                left: Number
             },
             number: Number,
             zIndex: Number,
@@ -37,8 +41,8 @@ var GameSchema = mongoose.Schema({
         library: [Number],
         cards: [{
             offset: {
-                top: String,
-                left: String
+                top: Number,
+                left: Number
             },
             number: Number,
             zIndex: Number,
