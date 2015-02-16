@@ -485,18 +485,19 @@
         // load game
         if ($routeParams.id) {
             Game.findOne({_id:$routeParams.id}, function(err,result){
-                var game = result;
+                var savedGame = result;
+                var game = savedGame.name;
 
-                $rootScope.player1=game.player1;
-                $rootScope.player2=game.player2;
+                $rootScope.player1=savedGame.player1;
+                $rootScope.player2=savedGame.player2;
 
-                if (game.player1===$scope.globals.currentUser.username){
-                    $rootScope.my=game.player1Stats;
-                    $rootScope.op=game.player2Stats;
+                if (savedGame.player1===$scope.globals.currentUser.username){
+                    $rootScope.my=savedGame.player1Stats;
+                    $rootScope.op=savedGame.player2Stats;
                 }
                 else {
-                    $rootScope.my=game.player2Stats;
-                    $rootScope.op=game.player1Stats;
+                    $rootScope.my=savedGame.player2Stats;
+                    $rootScope.op=savedGame.player1Stats;
                 }
                 // place cards in game-area
                 loadGameCards($rootScope.my.cards,'my');
@@ -506,7 +507,7 @@
                 $scope.reorganize('op');
 
                 // join room
-                socket.emit('host:join', game.name);
+                socket.emit('host:join', game);
             });
         }
 

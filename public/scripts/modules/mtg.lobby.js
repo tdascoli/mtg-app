@@ -33,6 +33,7 @@
         };
 
         $scope.loadGame=function(id,name){
+            $scope.gameName=name;
             socket.emit('host', name);
             $location.path('/playground/load/'+id);
         };
