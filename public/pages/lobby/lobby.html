@@ -1,4 +1,6 @@
+<!--
 <alert alert-dismissable="true">Update available <button class="btn-sm" glyph-icon="refresh" click="javascript:location.reload();"> Update</button></alert>
+-->
 <strong>Hello {{ getCredentials().currentUser.username }}</strong>
 <br />
 live games
@@ -11,7 +13,7 @@ live games
 saved games
 <div class="well">
     <ul>
-        <li ng-repeat="game in savedGames"><a href="#/playground/load/{{game._id}}">{{game.name}} ({{game.player1}} vs. {{game.player2}})</a></li>
+        <li ng-repeat="game in savedGames"><a class="cursor" ng-click="loadGame(game._id,game.name)">{{game.name}} ({{game.player1}} vs. {{game.player2}})</a></li>
     </ul>
 </div>
 <ng-include src="'/pages/lobby/host-game.html'"></ng-include>

@@ -32,6 +32,11 @@
             $location.path('/playground/'+$scope.gameName);
         };
 
+        $scope.loadGame=function(id,name){
+            socket.emit('host', name);
+            $location.path('/playground/load/'+id);
+        };
+
         $rootScope.debugGame=function(){
             socket.emit('host:debug', 'debug-'+$rootScope.globals.currentUser.username);
             $location.path('/playground/debug/debug-'+$rootScope.globals.currentUser.username);

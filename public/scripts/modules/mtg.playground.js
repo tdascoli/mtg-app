@@ -504,6 +504,9 @@
 
                 $scope.reorganize('my');
                 $scope.reorganize('op');
+
+                // join room
+                socket.emit('host:join', game.name);
             });
         }
 
