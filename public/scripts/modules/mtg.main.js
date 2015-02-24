@@ -15,4 +15,17 @@
         };
     });
 
+    module.controller('SignupCtrl', function ($scope,$location,User) {
+
+        $scope.user = new User();
+        $scope.signUpMsg=false;
+
+        $scope.register=function(){
+            $scope.user.save(function(err, result){
+
+                console.log('SAVE',$scope.user._id,err,result);
+            });
+        };
+    });
+
 }());

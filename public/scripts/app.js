@@ -25,9 +25,11 @@
         'mtg.chat',
         'mtg.auth',
         'mtg.lobby',
+        'mtg.deckbuilder',
         'btford.socket-io',
         'ngDragDrop',
-        'angoose.client'
+        'angoose.client',
+        'swipe'
     ];
 
     /**
@@ -47,8 +49,6 @@
             /** -- Routings -- **/
             var routes = [
                 {path: '/', redirectTo: '/lobby'},
-                // archive
-                {path: '/chat', templateUrl: '/pages/playground/chat.html', controller: 'ChatCtrl'},
                 // mtg
                 {path: '/lobby', templateUrl: '/pages/lobby/lobby.html', controller: 'LobbyCtrl'},
                 {path: '/deck-builder', templateUrl: '/pages/deck-builder/deck-builder.html', controller: 'DeckBuilderCtrl'},
@@ -120,7 +120,10 @@
 
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
                 // redirect to login page if not logged in
-                if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
+                if ( (
+                        $location.path() !== '/login' &&
+                        $location.path() !== '/signup'
+                    ) && !$rootScope.globals.currentUser) {
                     $location.path('/login');
                 }
             });

@@ -31,5 +31,5 @@ var io = require('socket.io').listen(app.listen(port));
 require('./server/socket')(io);
 
 process.on('uncaughtException',function(e) {
-    console.log(" Unhandled Error caught in server.js -----> : ",e,  e.stack);
+    console.log(" Unhandled Error caught in app.js -----> : ",e,  e.stack);
 });

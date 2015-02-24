@@ -11,6 +11,10 @@
         var $exile = {my:$('#my-exile'),op:$('#op-exile')};
         var side = 'my';
 
+        // game
+        var game = $routeParams.game;
+        var savedGame=false;
+
         $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
         $rootScope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
 
@@ -465,7 +469,6 @@
         $scope.initShow=false;
         // join game
         if ($routeParams.game || $routeParams.debug) {
-            var game = $routeParams.game;
             // debug
             if ($routeParams.debug) {
                 $rootScope.debug=true;
@@ -485,8 +488,8 @@
         // load game
         if ($routeParams.id) {
             Game.findOne({_id:$routeParams.id}, function(err,result){
-                var savedGame = result;
-                var game = savedGame.name;
+                savedGame = result;
+                game = savedGame.name;
 
                 $rootScope.player1=savedGame.player1;
                 $rootScope.player2=savedGame.player2;
@@ -543,21 +546,29 @@
             if (!$rootScope.player1){
                 $rootScope.player1=user;
             }
-            return new Game({
-                player1: $rootScope.player1,
-                player2: $rootScope.player2,
-                saved: user,
-                name: $routeParams.game,
-                player1Stats: ($rootScope.player1===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op),
-                player2Stats: ($rootScope.player2===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op)
-            });
+            // when game name is unknown
+            if (!game){
+                game = $routeParams.game;
+            }
+
+            if (!savedGame){
+                savedGame = new Game({
+                    player1: $rootScope.player1,
+                    player2: $rootScope.player2,
+                    saved: user,
+                    name: game,
+                    player1Stats: ($rootScope.player1===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op),
+                    player2Stats: ($rootScope.player2===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op)
+                });
+            }
+            return savedGame;
         }
 
         function convertOffset(op,offset){
             return {
-                    top:GameAreaService.convertFluidTop(offset.top,55,op),
-                    left:GameAreaService.convertFluidLeft(offset.left,48)
-                  };
+                top:GameAreaService.convertFluidTop(offset.top,55,op),
+                left:GameAreaService.convertFluidLeft(offset.left,48)
+              };
         }
     });
 

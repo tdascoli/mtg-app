@@ -87,6 +87,7 @@
                             'lib/angular-dragdrop/src/angular-dragdrop.js',
                             'lib/angular-touch/angular-touch.js',
                             'lib/angular-socket-io/socket.js',
+                            'lib/angular-swipe/dist/angular-swipe.js',
                             'lib/ng-lodash/build/ng-lodash.js',
                             'lib/autofill-event/src/autofill-event.js',
                             'lib/angular-cookies/angular-cookies.js',
@@ -101,7 +102,8 @@
                             'lib/angular-ui-bootstrap/src/modal/modal.js',
                             'lib/angular-ui-bootstrap/src/transition/transition.js',
                             'lib/lodash/dist/lodash.js',
-                            'lib/restangular/dist/restangular.js'
+                            'lib/restangular/dist/restangular.js',
+                            'lib/mailcheck/src/mailcheck.js'
                         ]
                     }
                 }

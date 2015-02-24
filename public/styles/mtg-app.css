@@ -15,7 +15,7 @@
 }
 body,
 html {
-  font-family: 'Frutiger Neue Light', 'RobotoDraft', sans-serif;
+  font-family: 'RobotoDraft', sans-serif;
 }
 body {
   margin: 0;
@@ -312,15 +312,24 @@ body.login {
   background-color: #fff;
 }
 .login-screen {
-  padding-top: 2.6em;
+  margin: 0 auto;
+  padding-top: 5.2em;
+  width: 33%;
+}
+@media (max-width: 991px) {
+  .login-screen {
+    padding-top: 2.6em;
+    width: 100%;
+  }
 }
 .login-form {
-  width: 350px;
   margin: 0 auto;
   padding: 24px 23px 20px;
   background-color: #eee;
   border-radius: 6px;
-  width: 100%;
+  /*@media (max-width: @screen-sm-max) {
+    width: 100%;
+  }*/
 }
 .login-form h3 {
   margin: 0 0 15px 0;
