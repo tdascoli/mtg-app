@@ -6,7 +6,7 @@
 live games
 <div class="well">
     <ul>
-        <li ng-repeat="game in games"><a href="#/playground/{{game.name}}">{{game.name}} ({{game.player1}})</a></li>
+        <li ng-repeat="game in games"><a href="#/playground/{{game.name}}" ng-class="{'new-game' : game.name===newGame}">{{game.name}} ({{game.player1}})</a></li>
     </ul>
 </div>
 

@@ -1,15 +1,16 @@
 ;(function () {
     'use strict';
 
-    var module = angular.module('mtg.lobby', ['mtg.socket','mtg.variables']);
+    var module = angular.module('mtg.lobby', ['mtg.socket','mtg.variables','ngLodash']);
 
-    module.controller('LobbyCtrl', function ($scope,$rootScope,$location,socket,AuthenticationService,Game) {
+    module.controller('LobbyCtrl', function ($scope,$rootScope,$location,lodash,socket,AuthenticationService,Game) {
 
         $rootScope.countMessage=0;
         $rootScope.player1=false;
         $rootScope.player2=false;
         $scope.gameName='';
         $scope.games=[];
+        $scope.newGame='';
 
         if ($rootScope.globals.currentUser) {
             Game.find({$or: [{player1: $scope.globals.currentUser.username}, {player2: $scope.globals.currentUser.username}]}, function (err, result) {
@@ -34,7 +35,7 @@
 
         $scope.loadGame=function(id,name){
             $scope.gameName=name;
-            socket.emit('host', name);
+            socket.emit('host:save-game', name);
             $location.path('/playground/load/'+id);
         };
 
@@ -43,9 +44,15 @@
             $location.path('/playground/debug/debug-'+$rootScope.globals.currentUser.username);
         };
 
-        socket.on('host:update', function (newgame, player1) {
-            console.log(player1, newgame);
-            $scope.games.push({name:newgame,player1:player1});
+        socket.on('host:update', function (games, newgame) {
+            $scope.newGame=newgame;
+            console.log(games);
+            $scope.games = games;
+        });
+
+        socket.on('host:list', function (games) {
+            console.log(games);
+            $scope.games = games;
         });
     });
 

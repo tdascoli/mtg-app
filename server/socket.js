@@ -1,7 +1,9 @@
 module.exports = function (io) {
     'use strict';
 
+    var lodash = require('lodash');
     var usernames = {};
+    var games = [];
 
     io.on('connection', function (socket) {
 
@@ -18,15 +20,18 @@ module.exports = function (io) {
         socket.on('user:login', function (username) {
             socket.username = username;
             usernames[username] = username;
-            console.log('user login',username);
+            console.log('user login', username);
+            socket.emit('host:list', games);
         });
 
         //=== host games
         socket.on('host', function(name){
             socket.emit('mtg:update', 'SERVER', socket.username+' host this game: '+name);
+            // add room {name:newgame,player1:player1}
+            games.push({name: name, player1: socket.username});
             // define game (room)
             socket.game=name;
-            socket.broadcast.emit('host:update', socket.game, socket.username);
+            socket.broadcast.emit('host:update', games, socket.game);
         });
 
         socket.on('host:debug', function(name){
@@ -38,6 +43,12 @@ module.exports = function (io) {
         socket.on('host:join', function(game){
             socket.game=game;
             joinGame(socket.game,socket.username);
+        });
+
+        socket.on('host:save-game', function(name){
+            socket.emit('mtg:update', 'SERVER', socket.username+' loaded this game: '+name);
+            // define game (room)
+            socket.game=name;
         });
 
         function joinGame(game,username){
@@ -61,7 +72,9 @@ module.exports = function (io) {
         // when the user disconnects.. perform this
         socket.on('disconnect', function(){
             // todo: inform opponent, flush game list?!, save in db?!
-
+            // remove game from list
+            lodash.remove(games,lodash.findIndex(games, {name: socket.game}));
+            socket.emit('host:list', games);
             // remove the username from global usernames list
             delete usernames[socket.username];
             // update list of users in chat, client-side

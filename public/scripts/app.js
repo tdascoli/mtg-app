@@ -52,6 +52,7 @@
                 // mtg
                 {path: '/lobby', templateUrl: '/pages/lobby/lobby.html', controller: 'LobbyCtrl'},
                 {path: '/deck-builder', templateUrl: '/pages/deck-builder/deck-builder.html', controller: 'DeckBuilderCtrl'},
+                {path: '/deck-builder/scan', templateUrl: '/pages/deck-builder/scan-card.html', controller: 'DeckBuilderCtrl'},
                 {path: '/playground', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 {path: '/playground/:game', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
                 {path: '/playground/load/:id', templateUrl: '/pages/playground/playground.html', controller: 'GameAreaCtrl'},
