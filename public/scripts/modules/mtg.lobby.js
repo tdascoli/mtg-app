@@ -46,12 +46,10 @@
 
         socket.on('host:update', function (games, newgame) {
             $scope.newGame=newgame;
-            console.log(games);
             $scope.games = games;
         });
 
         socket.on('host:list', function (games) {
-            console.log(games);
             $scope.games = games;
         });
     });

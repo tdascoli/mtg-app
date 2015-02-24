@@ -29,7 +29,8 @@
         'btford.socket-io',
         'ngDragDrop',
         'angoose.client',
-        'swipe'
+        'swipe',
+        'ngFastLevenshtein'
     ];
 
     /**

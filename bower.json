@@ -42,7 +42,8 @@
     "alv-ch-ng.core":"~0.2.0",
     "jquery-ui": "latest",
     "jqueryui-touch-punch":"latest",
-    "lodash":"latest"
+    "lodash":"latest",
+    "ng-fast-levenshtein":"latest"
   },
   "devDependencies": {
     "less": "1.7.0"

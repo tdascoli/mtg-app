@@ -103,6 +103,7 @@
                             'lib/angular-ui-bootstrap/src/transition/transition.js',
                             'lib/lodash/dist/lodash.js',
                             'lib/restangular/dist/restangular.js',
+                            'lib/ng-fast-levenshtein/dist/ng-fast-levenshtein.js',
                             'lib/mailcheck/src/mailcheck.js'
                         ]
                     }

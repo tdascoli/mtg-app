@@ -15,11 +15,6 @@
         var game = $routeParams.game;
         var savedGame=false;
 
-        $scope.swipe = function($event) {
-            console.log($event);
-            alert($event);
-        };
-
         $rootScope.currentPhase={begin:false,main1:false,combat:false,main2:false,end:false};
         $rootScope.phase={begin:false,main1:false,combat:false,main2:false,end:false};
 
@@ -221,7 +216,6 @@
 
         $scope.saveGame=function(){
             var game = saveGame($rootScope.globals.currentUser.username);
-            console.log(game);
             game.save(function(err,result){
                 console.log('SAVE GAME',game._id,err,result);
             });
