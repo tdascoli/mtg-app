@@ -13,7 +13,7 @@ live games
 saved games
 <div class="well">
     <ul>
-        <li ng-repeat="game in savedGames"><a class="cursor" ng-click="loadGame(game._id,game.name)">{{game.name}} ({{game.player1}} vs. {{game.player2}})</a></li>
+        <li ng-repeat="game in savedGames"><a class="cursor" ng-click="loadGame(game._id,game.name)">{{game.name}} ({{game.player1}} vs. {{game.player2}})</a> <span glyph-icon="trash"></span></li>
     </ul>
 </div>
 <ng-include src="'/pages/lobby/host-game.html'"></ng-include>

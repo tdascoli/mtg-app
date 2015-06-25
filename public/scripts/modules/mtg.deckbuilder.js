@@ -3,7 +3,7 @@
 
     var module = angular.module('mtg.deckbuilder', ['mtg.variables','mtg.modals','restangular','ngLodash','ngFastLevenshtein']);
 
-    module.controller('DeckBuilderCtrl', function ($scope,$rootScope,$http,MTGJson,lodash,Deck,fastLevenshteinService) {
+    module.controller('DeckBuilderCtrl', function ($scope,$rootScope,$http,$location,MTGJson,lodash,Deck,fastLevenshteinService) {
         $scope.cards=null;
         $scope.searchCards=[];
         var emptyDeck=new Deck({ name: 'New Deck', username: $rootScope.globals.currentUser.username, cards: [] });
@@ -38,7 +38,11 @@
             $scope.deck.cards.splice(index, 1);
         };
 
-        $scope.searchParseCard=function(){
+        $scope.scan=function(){
+            $location.path('/deck-builder/scan');
+        };
+
+        $scope.searchParseCard=function(searchCards){
             $scope.idle=true;
             $scope.searchCards=[];
             $http.get('/data/sets.json').then(function(sets) {
@@ -59,14 +63,22 @@
         };
 
         $scope.searchCard=function(){
+            $scope.idle=true;
+            $scope.searchCards=[];
             $http.get('/data/sets.json').then(function(sets) {
                 $scope.cards=null;
                 angular.forEach(sets.data, function(setObject){
-                    var cards = lodash.pluck(lodash.filter(setObject.cards,{'name':$scope.search}),'multiverseid');
+                    var cards = lodash.pluck(lodash.filter(setObject.cards,function(card){
+                        if (fastLevenshteinService.distance(card.name.toLowerCase(),$scope.search.toLowerCase())<4){
+                            return card;
+                        }
+                    }),'multiverseid');
+
                     if (cards.length>0){
                         $scope.searchCards = lodash.compact($scope.searchCards.concat(cards));
                     }
                 });
+                $scope.idle=false;
             });
         };
 
@@ -76,7 +88,7 @@
 
         $scope.showCard=function(multiverseid){
             if (multiverseid){
-                return 'http://mtgimage.com/multiverseid/' + multiverseid + '.jpg';
+                return 'http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=' + multiverseid;
             }
             return '/images/card-back.jpeg';
         };

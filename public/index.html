@@ -52,6 +52,9 @@
                     <button show-startswith="/playground" type="button" class="navbar-toggle navbar-btn navbar-playground" data-toggle="modal" data-target="#player-stats">
                         <span glyph-icon="stats"></span>
                     </button>
+                    <button show-startswith="/playground" type="button" class="navbar-toggle navbar-btn navbar-playground" ng-click="saveGame()">
+                        <span glyph-icon="floppy-disk"></span>
+                    </button>
                     <!-- deck-builder -->
                     <button show-startswith="/deck-builder" type="button" class="navbar-toggle navbar-btn navbar-playground" ng-click="saveDeck()">
                         <span glyph-icon="floppy-disk"></span>
@@ -133,6 +136,7 @@
     <script src="scripts/js/detectmobilebrowser.js"></script>
     <script src="scripts/js/navbar.js"></script>
     <!-- /scripts -->
+
 
 </body>
 </html>

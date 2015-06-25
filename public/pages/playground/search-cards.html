@@ -9,10 +9,10 @@
             </div>
             <div class="modal-body">
                 <div ng-show="isLibrary()">
-                    <img ng-src="http://mtgimage.com/multiverseid/{{card}}.jpg" id="card_{{$index}}" class="search-card" ng-click="selectCard($index,card)" ng-repeat="card in searchCards() | limitTo : amountCards track by $index "  />
+                    <img ng-src="http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid={{card}}" id="card_{{$index}}" class="search-card" ng-click="selectCard($index,card)" ng-repeat="card in searchCards() | limitTo : amountCards track by $index "  />
                 </div>
                 <div ng-hide="isLibrary()">
-                    <img ng-src="http://mtgimage.com/multiverseid/{{card}}.jpg" id="card_{{$index}}" class="search-card" ng-click="selectCard($index,card)"  ng-repeat="card in searchCards() track by $index " />
+                    <img ng-src="http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid={{card}}" id="card_{{$index}}" class="search-card" ng-click="selectCard($index,card)"  ng-repeat="card in searchCards() track by $index " />
                 </div>
             </div>
         </div>

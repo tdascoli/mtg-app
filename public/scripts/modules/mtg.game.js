@@ -13,43 +13,38 @@
 
         // load or host game
         $scope.initGame=false;
-        $scope.game=new Game({
-            player1: false,
-            player2: false,
-            name: $routeParams.game,
-            player1Stats: { hitpoints: 20, infection: 0, cards: [], library: [] },
-            player2Stats: { hitpoints: 20, infection: 0, cards: [], library: [] }
-        });
+
+        var savedGame=false;
+        var game=$routeParams.game; // game object old:var game = $routeParams.game;
 
         // join game
         if ($routeParams.game || $routeParams.debug) {
             // debug
             if ($routeParams.debug) {
                 $rootScope.debug=true;
-                $scope.game.name=$routeParams.debug;
+                game = $routeParams.debug;
             }
 
-            socket.emit('mtg:join:game', $scope.game.name);
+            socket.emit('mtg:join:game', game);
+
+            if (!$rootScope.player1){
+                $rootScope.player1=$scope.globals.currentUser.username;
+            }
+            else {
+                $rootScope.player2=$scope.globals.currentUser.username;
+            }
         }
 
         socket.on('mtg:game:init', function (data) {
             console.log('mtg:game:init',data);
             if (data.action==='ready'){
-                // PLAYER2: set players
-                if (!$scope.game.player1){
-                    $scope.game.player1=data.player1;
-                    $scope.game.player2=data.player2;
-                }
-                if ($scope.game._id===undefined){
-                    $scope.drawFullHand();
-                }
                 $scope.initGame=true;
             }
         });
 
         // MODALS
         $scope.sendDeck=function(){
-            socket.emit('mtg:game:init', {game:$scope.game.name,user:$scope.globals.currentUser.username,action:'deck'});
+            socket.emit('mtg:game:init', {game:game,user:$scope.globals.currentUser.username,action:'deck'});
         };
 
         // PLAYGROUND
@@ -187,16 +182,16 @@
             });
         };
 
-        $rootScope.saveGame=function(){
-            socket.emit('mtg:game:save');
+        // todo wip
+        $scope.saveGame=function(){
+            var game = saveGame($rootScope.globals.currentUser.username);
+            game.save(function(err,result){
+                console.log('SAVE GAME',game._id,err,result);
+            });
         };
 
         $scope.drawFullHand=function(){
-            var fullHand=7;
-            if ($rootScope.my.library.length<7){
-                fullHand=$rootScope.my.library.length;
-            }
-            for(var i=0;i<fullHand;i++){
+            for(var i=0;i<7;i++){
                 $scope.drawCard(false,'my');
             }
         };
@@ -364,20 +359,22 @@
             }
         });
 
-        // todo ask for saving game...
         socket.on('host:save', function (user) {
             console.log('host:save',user,'has disconnected');
-            saveGame(user);
+            var game = saveGame(user);
             // todo collect data and store, show message etc...
             // todo --> refresh?!
-            $scope.game.save(function(err,result){
-                console.log('SAVE GAME',$scope.game._id,err,result);
+            game.save(function(err,result){
+                console.log('SAVE GAME',game._id,err,result);
             });
         });
 
         socket.on('mtg:game:joined', function(user){
-            console.log('mtg:game:joined',user);
-            // todo info...?!
+            if (user!==$rootScope.globals.currentUser.username) {
+                socket.emit('mtg:game:init', {action:'ready'});
+                $scope.initGame=true;
+                $rootScope.player2 = user;
+            }
         });
 
         // Methods published to the scope
@@ -439,34 +436,40 @@
         };
 
         // load game
+        // TODO wip
         if ($routeParams.id) {
 
             Game.findOne({_id:$routeParams.id}, function(err,result){
-                $scope.game=result;
+                savedGame = result;
+                game = savedGame.name;
 
-                if ($scope.game.player1===$scope.globals.currentUser.username){
-                    $rootScope.my=$scope.game.player1Stats;
-                    $rootScope.op=$scope.game.player2Stats;
+                $rootScope.player1=savedGame.player1;
+                $rootScope.player2=savedGame.player2;
+
+                if (savedGame.player1===$scope.globals.currentUser.username){
+                    $rootScope.my=savedGame.player1Stats;
+                    $rootScope.op=savedGame.player2Stats;
                 }
                 else {
-                    $rootScope.my=$scope.game.player2Stats;
-                    $rootScope.op=$scope.game.player1Stats;
+                    $rootScope.my=savedGame.player2Stats;
+                    $rootScope.op=savedGame.player1Stats;
                 }
 
-                // TODO wip
+                $scope.initLoadGame=true;
+
                 // place cards in game-area
                 loadGameCards($rootScope.my.cards,'my');
                 loadGameCards($rootScope.op.cards,'op');
 
-                // TODO wip
                 $scope.reorganize('my');
                 $scope.reorganize('op');
 
                 // join room
-                socket.emit('mtg:load:game', {name:$scope.game.name,player1:$scope.game.player1,player2:$scope.game.player2});
+                socket.emit('host:join', game);
             });
         }
 
+        // TODO wip
         function loadGameCards(cards,side){
             angular.forEach(cards, function(card){
                 var $card;
@@ -494,16 +497,28 @@
             });
         }
 
+        // TODO wip
         function saveGame(user){
-            $scope.game.saved=user;
-            if ($scope.game.player1===$rootScope.globals.currentUser.username){
-                $scope.game.player1Stats=$rootScope.my;
-                $scope.game.player2Stats=$rootScope.op;
+            // when player1 unknown
+            if (!$rootScope.player1){
+                $rootScope.player1=user;
             }
-            else {
-                $scope.game.player1Stats=$rootScope.op;
-                $scope.game.player2Stats=$rootScope.my;
+            // when game name is unknown
+            if (!game){
+                game = $routeParams.game;
             }
+
+            if (!savedGame){
+                savedGame = new Game({
+                    player1: $rootScope.player1,
+                    player2: $rootScope.player2,
+                    saved: user,
+                    name: game,
+                    player1Stats: ($rootScope.player1===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op),
+                    player2Stats: ($rootScope.player2===$rootScope.globals.currentUser.username ? $rootScope.my : $rootScope.op)
+                });
+            }
+            return savedGame;
         }
 
         function convertOffset(op,offset){

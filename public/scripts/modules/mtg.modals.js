@@ -43,7 +43,7 @@
 
         $scope.cardWidget=function(){
             if ($('#card-widget-mobile').attr('multiverseid')){
-                return 'http://mtgimage.com/multiverseid/' + $('#card-widget-mobile').attr('multiverseid') + '.jpg';
+                return 'http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=' + $('#card-widget-mobile').attr('multiverseid');
             }
             return '/images/card-back.jpeg';
         };
@@ -105,7 +105,7 @@
         };
 
         $scope.showSearchCardModal=function(multiverseid){
-            return 'http://mtgimage.com/multiverseid/' + multiverseid + '.jpg';
+            return 'http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=' + multiverseid;
         };
 
         $scope.showCardsModal=function(){
@@ -157,7 +157,7 @@
 
         $scope.choosePlayDeck=function(){
             $scope.my.library=$scope.deck;
-            $scope.initShow=false;
+            $scope.sendDeck();
         };
     });
 

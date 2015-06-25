@@ -8,6 +8,7 @@
         $rootScope.countMessage=0;
         $rootScope.player1=false;
         $rootScope.player2=false;
+
         $scope.gameName='';
         $scope.games=[];
         $scope.newGame='';
@@ -29,7 +30,7 @@
 
         $scope.hostGame=function(){
             $rootScope.player1=$scope.globals.currentUser.username;
-            socket.emit('host', $scope.gameName);
+            socket.emit('mtg:host:game', $scope.gameName);
             $location.path('/playground/'+$scope.gameName);
         };
 
@@ -44,12 +45,12 @@
             $location.path('/playground/debug/debug-'+$rootScope.globals.currentUser.username);
         };
 
-        socket.on('host:update', function (games, newgame) {
+        socket.on('mtg:host:update', function (games, newgame) {
             $scope.newGame=newgame;
             $scope.games = games;
         });
 
-        socket.on('host:list', function (games) {
+        socket.on('mtg:host:list', function (games) {
             $scope.games = games;
         });
     });

@@ -9,8 +9,7 @@
                 <select form-input form-label="Choose set" class="input-sm" ng-change="setSet()" ng-model="selectedSet" name="sets" id="sets" ng-options="item.code as item.name for item in setList"></select>
             </div>
             <div role="tabpanel" class="tab-pane" id="search">
-                <input form-input form-label="Search card" class="input-sm" type="text" name="search" id="search-card" placeholder="search card" form-append="search" form-append-icon="true" form-append-btn-submit="true" form-append-btn="searchParseCard()" ng-model="search" />
-                <a href="#/deck-builder/scan">Scan card</a>
+                <input form-input form-label="Search card" class="input-sm" type="text" name="search" id="search-card" placeholder="search card" form-inset="camera" form-inset-action="scan()" form-append="search" form-append-icon="true" form-append-btn-submit="true" form-append-btn="searchCard()" ng-model="search" />
             </div>
         </div>
     </div>

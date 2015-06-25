@@ -99,3 +99,10 @@
 .op.has-token:after {
   background: @mtg-red;
 }
+
+.in-graveyard img,
+.in-exile img {
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
+  filter: alpha(opacity=75);
+  opacity: 0.75;
+}

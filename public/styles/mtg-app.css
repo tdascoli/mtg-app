@@ -317,6 +317,12 @@ button.playgroundnav {
 .op.has-token:after {
   background: #8b0000;
 }
+.in-graveyard img,
+.in-exile img {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
+  filter: alpha(opacity=75);
+  opacity: 0.75;
+}
 body.login {
   background-color: #fff;
 }
